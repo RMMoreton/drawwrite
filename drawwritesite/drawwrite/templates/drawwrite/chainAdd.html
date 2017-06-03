@@ -1,11 +1,12 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
     <head>
         <title>Add To Chain</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
@@ -27,30 +28,32 @@
     </head>
 
     <body>
-        <div class="previosLink">
-            {% if prevLinkType == 'write' %}
-            <p>{{ prevLink.text }}</p>
-            {% else %}
-            <img src="{{ prevLink.f.url }}">
-            {% endif %}
-        </div>
-
-        <form id="postForm" action="{% url 'drawwrite:createLink' playerId %}" method="post">
-            {% csrf_token %}
-            <div class="currentLink">
+        <div class="container-fluid">
+            <div class="previosLink">
                 {% if prevLinkType == 'write' %}
-                <div>
-                    <canvas id="drawWriteCanvas" width="500px" height="500px">
-                        If you can see this, then this app will not work in your browser. Sorry!
-                    </canvas>
-                </div>
-                <input id="imgDataHolder" type="hidden" name="drawing">
+                <p>{{ prevLink.text }}</p>
                 {% else %}
-                <input type="text" name="description">
+                <img src="{{ prevLink.f.url }}">
                 {% endif %}
             </div>
-            <input type="submit" value="Submit">
-        </form>
+
+            <form id="postForm" action="{% url 'drawwrite:createLink' playerId %}" method="post">
+                {% csrf_token %}
+                <div class="currentLink">
+                    {% if prevLinkType == 'write' %}
+                    <div>
+                        <canvas id="drawWriteCanvas" width="500px" height="500px">
+                            If you can see this, then this app will not work in your browser. Sorry!
+                        </canvas>
+                    </div>
+                    <input id="imgDataHolder" type="hidden" name="drawing">
+                    {% else %}
+                    <input type="text" name="description">
+                    {% endif %}
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
     </body>
 
 </html>

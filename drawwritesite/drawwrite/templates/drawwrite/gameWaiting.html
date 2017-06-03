@@ -1,10 +1,12 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
     <head>
-        <title>Wait for game completion</title>
+        <title>Waiting Area</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
@@ -15,8 +17,10 @@
     </head>
 
     <body>
-        <h1>Wait here for all players to finish the game</h1>
-        <button onclick="checkGameDone()">Check for game completion</button>
+        <div class="container-fluid">
+            <h1>Wait here for all players to finish the game</h1>
+            <button onclick="checkGameDone()">Check for game completion</button>
+        </div>
     </body>
 
 </html>

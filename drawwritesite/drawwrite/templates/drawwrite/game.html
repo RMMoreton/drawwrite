@@ -1,22 +1,28 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
     <head>
-        <title>A completed game</title>
+        <title>Completed Game</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
     </head>
 
     <body>
-        <h1>{{ gameName }}</h1>
-        <ul>
-        {% for player in players %}
-            <li><a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a></li>
-        {% endfor %}
-        </ul>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <h1>{{ gameName }}</h1>
+                <ul>
+                {% for player in players %}
+                    <li><a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
     </body>
 
 </html>

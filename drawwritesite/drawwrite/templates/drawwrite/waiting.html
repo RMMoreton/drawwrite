@@ -1,9 +1,12 @@
 {% load static %}
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
     <head>
-        <title>Waiting to begin</title>
+        <title>Waiting Area</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
@@ -14,19 +17,21 @@
     </head>
 
     <body>
-        <h1>Players in this game:</h1>
-        <ul id="name-list">
-        {% for player in allPlayers %}
-            <li>{{player.name}}</li>
-        {% endfor %}
-        </ul>
-        <button onclick="checkGameStart()">Refresh</button>
-        {% if created %}
-            <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
-                {% csrf_token %}
-                <button>Start Game</button>
-            </form>
-        {% endif %}
+        <div class="container-fluid">
+            <h1>Players in this game:</h1>
+            <ul id="name-list">
+            {% for player in allPlayers %}
+                <li>{{player.name}}</li>
+            {% endfor %}
+            </ul>
+            <button onclick="checkGameStart()">Refresh</button>
+            {% if created %}
+                <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
+                    {% csrf_token %}
+                    <button>Start Game</button>
+                </form>
+            {% endif %}
+        </div>
     </body>
 
 </html>
