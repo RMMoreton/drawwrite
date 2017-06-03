@@ -1,0 +1,10 @@
+bin/
+include/
+lib/
+pip-selfcheck.json
+pyvenv.cfg
+drawwritesite/db.sqlite3
+drawwritesite/media/
+drawwritesite/drawwritesite/settings.py
+*.pyc
+*.swp

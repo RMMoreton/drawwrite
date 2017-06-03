@@ -1,0 +1,14 @@
+version: 1
+formatters:
+    basic:
+        format: '%(levelname)-8s: %(name)-15s: %(message)s'
+handlers:
+    console:
+        class: logging.StreamHandler
+        formatter: basic
+        stream: ext://sys.stdout
+loggers:
+    '':
+        level: DEBUG
+        handlers:
+            - console

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chain</title>
+    </head>
+    <body>
+        <ul>
+        {% for link in links %}
+            <li>
+            {% if link.f %}
+                <img src="{{ link.f.url }}">
+            {% elif link.text %}
+                <p>{{ link.text }}</p>
+            {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </body>
+</html>

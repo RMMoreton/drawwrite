@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>A completed game</title>
+    </head>
+    <body>
+        <h1>{{ gameName }}</h1>
+        <ul>
+        {% for player in players %}
+            <li><a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </body>
+</html>
+
