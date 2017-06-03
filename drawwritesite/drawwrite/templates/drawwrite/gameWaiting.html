@@ -2,14 +2,21 @@
 
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>Wait for game completion</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
         <script type="text/javascript">var checkUrl = "{% url 'drawwrite:checkGameDone' gameId %}";</script>
         <script type="text/javascript" src="{% static 'drawwrite/js/gameWaiting.js' %}"></script>
     </head>
+
     <body>
         <h1>Wait here for all players to finish the game</h1>
         <button onclick="checkGameDone()">Check for game completion</button>
     </body>
+
 </html>

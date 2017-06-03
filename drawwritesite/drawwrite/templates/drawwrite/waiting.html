@@ -1,25 +1,32 @@
 {% load static %}
 
 <html>
-<head>
-    <title>Waiting to begin</title>
-    <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
-    <script type="text/javascript">var ajaxNameUrl = "{% url 'drawwrite:checkGameStart' playerId %}";</script>
-    <script type="text/javascript" src="{% static 'drawwrite/js/waiting.js' %}"></script>
-</head>
-<body>
-    <h1>Players in this game:</h1>
-    <ul id="name-list">
-    {% for player in allPlayers %}
-        <li>{{player.name}}</li>
-    {% endfor %}
-    </ul>
-    <button onclick="checkGameStart()">Refresh</button>
-    {% if created %}
-        <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
-            {% csrf_token %}
-            <button>Start Game</button>
-        </form>
-    {% endif %}
-</body>
+
+    <head>
+        <title>Waiting to begin</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+
+        <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
+        <script type="text/javascript">var ajaxNameUrl = "{% url 'drawwrite:checkGameStart' playerId %}";</script>
+        <script type="text/javascript" src="{% static 'drawwrite/js/waiting.js' %}"></script>
+    </head>
+
+    <body>
+        <h1>Players in this game:</h1>
+        <ul id="name-list">
+        {% for player in allPlayers %}
+            <li>{{player.name}}</li>
+        {% endfor %}
+        </ul>
+        <button onclick="checkGameStart()">Refresh</button>
+        {% if created %}
+            <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
+                {% csrf_token %}
+                <button>Start Game</button>
+            </form>
+        {% endif %}
+    </body>
+
 </html>

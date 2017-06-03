@@ -2,14 +2,21 @@
 
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>Waiting for round to complete</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
         <script type="text/javascript">var checkUrl = "{% url 'drawwrite:checkRoundDone' playerId %}";</script>
         <script type="text/javascript" src="{% static 'drawwrite/js/roundWaiting.js' %}"></script>
     </head>
+
     <body>
         <h1>Wait here for the round to complete.</h1>
         <button onclick="checkRoundDone()">Check Round Completion</button>
     </body>
+
 </html>

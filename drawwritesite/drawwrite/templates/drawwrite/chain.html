@@ -1,8 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>Chain</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
     </head>
+
     <body>
         <ul>
         {% for link in links %}
@@ -16,4 +23,5 @@
         {% endfor %}
         </ul>
     </body>
+
 </html>

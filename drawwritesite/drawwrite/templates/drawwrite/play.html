@@ -1,8 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
 <html>
-<head>
-    <title>Play DrawWrite!</title>
-</head>
-<body>
-    <h1>{{ name }}</h1>
-</body>
+
+    <head>
+        <title>Play DrawWrite!</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+    </head>
+
+    <body>
+        <h1>{{ name }}</h1>
+    </body>
+
 </html>
