@@ -1,10 +1,13 @@
 bin/
 include/
 lib/
+lib64
+local/
 pip-selfcheck.json
 pyvenv.cfg
-drawwritesite/db.sqlite3
+drawwritesite/db/
 drawwritesite/media/
+drawwritesite/static/
 drawwritesite/drawwritesite/settings.py
 *.pyc
 *.swp

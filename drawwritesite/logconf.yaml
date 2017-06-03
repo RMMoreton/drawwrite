@@ -7,8 +7,12 @@ handlers:
         class: logging.StreamHandler
         formatter: basic
         stream: ext://sys.stdout
+    file:
+        class: logging.FileHandler
+        formatter: basic
+        filename: /usr/log/drawwrite/drawwrite.log
 loggers:
     '':
         level: DEBUG
         handlers:
-            - console
+            - file

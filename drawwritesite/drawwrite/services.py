@@ -1,5 +1,6 @@
 # Imports {{{
 import logging
+from sys import exc_info
 
 from .models import Chain, DrawLink, Game, Player, WriteLink
 
@@ -16,8 +17,12 @@ def newGame(name):
     Return a new game with name set to the passed name.
     """
     LOG.debug('creating new game')
-    ret = Game(name=name)
-    ret.save()
+    try:
+        ret = Game(name=name)
+        ret.save()
+    except BaseException as e:
+        LOG.error('Exception: {}'.format(e))
+        raise
     LOG.debug('saved new game')
     return ret
 # }}}
