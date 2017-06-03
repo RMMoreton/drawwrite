@@ -6,4 +6,7 @@ import yaml
 conf = ''
 with open(settings.LOG_CONF) as f:
     conf = yaml.load(f)
-logging.config.dictConfig(conf)
+try:
+    logging.config.dictConfig(conf)
+except ValueError as e:
+    print(e)
