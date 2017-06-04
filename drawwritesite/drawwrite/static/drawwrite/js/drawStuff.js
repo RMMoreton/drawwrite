@@ -83,9 +83,23 @@ var drawWriteApp = (function () {
         canvas.addEventListener('touchcancel', endPathOffCanvas);
     }
 
+    // Create the canvas element, and make it the only child of the #drawWriteCanvasHolder div.
+    function makeCanvas() {
+        var canvasHolder = $('#drawWriteCanvasHolder');
+        //canvasHolder.first().empty();
+        canvas = document.createElement('canvas');
+        canvas.id = 'drawWriteCanvas';
+        canvas.width = canvasHolder.width();
+        canvas.height = 500;
+        canvasHolder.first().append(canvas);
+        return;
+    }
+
+    // Create the menu element.
+
     // Initialize the canvas, add the listeners.
     function init() {
-        canvas = document.getElementById('drawWriteCanvas');
+        makeCanvas();
         if(null === canvas) {
             return;
         }

@@ -1,0 +1,18 @@
+#drawWriteCanvasWrapper {
+    position: relative;
+}
+
+#drawWriteCanvas {
+    border: 1px solid black;
+}
+
+.canvas-menu {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+}
+
+.affix {
+    position: fixed;
+    top: 1px;
+}
