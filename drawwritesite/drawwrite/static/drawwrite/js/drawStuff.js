@@ -4,11 +4,32 @@ var drawWriteApp = (function () {
     "use strict";
 
     // Variables!
-    var canvas, ctx, pointRadius, paint, wasPath, prevX, prevY, init;
+    var canvas, ctx, pointRadius, paint, wasPath, prevX, prevY, init, tool, TOOL_ENUM, addedMenuListeners;
+
+    addedMenuListeners = false;
+
+    // Create the 'tool' object.
+    var TOOL_ENUM = {
+        DRAW: "draw",
+        HAND: "hand",
+    }
+
+    // Switch the tool to the "draw" tool.
+    function switchToDrawTool(e) {
+        tool = TOOL_ENUM.DRAW;
+    }
+
+    // Switch the tool to the "hand" tool.
+    function switchToHandTool(e) {
+        tool = TOOL_ENUM.HAND;
+    }
 
     // Draw a dot where the user clicked. This does not get executed if the
     // user draws a line.
     function dot(e) {
+        if(tool !== TOOL_ENUM.DRAW) {
+            return;
+        }
         if(wasPath === true) {
             wasPath = false;
         } else {
@@ -21,6 +42,9 @@ var drawWriteApp = (function () {
 
     // Start painting, and initalize the two 'previous' positions.
     function startPath(e) {
+        if(tool !== TOOL_ENUM.DRAW) {
+            return;
+        }
         var offsets = $(this).offset()
         paint = true;
         prevX = (e.type === 'touchstart' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
@@ -30,6 +54,9 @@ var drawWriteApp = (function () {
     // If we're painting, draw a line  between the previous point and the current point,
     // then update the current point.
     function continuePath(e) {
+        if(tool !== TOOL_ENUM.DRAW) {
+            return;
+        }
         if(paint) {
             var offsets = $(this).offset()
             var mX = (e.type === 'touchmove' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
@@ -68,7 +95,7 @@ var drawWriteApp = (function () {
     }
 
     // Add all the event listeners.
-    function addListeners() {
+    function addCanvasListeners() {
         // Mouse events.
         canvas.addEventListener('click', dot);
         canvas.addEventListener('mousedown', startPath);
@@ -83,6 +110,16 @@ var drawWriteApp = (function () {
         canvas.addEventListener('touchcancel', endPathOffCanvas);
     }
 
+    // Add menu listeners if we haven't already.
+    function addMenuListeners() {
+        if(addedMenuListeners) {
+            return;
+        }
+        $('#selectDrawTool').on('click', switchToDrawTool);
+        $('#selectHandTool').on('click', switchToHandTool);
+        addedMenuListeners = true;
+    }
+
     // Create the canvas element, and make it the only child of the #drawWriteCanvasHolder div.
     function makeCanvas() {
         var canvasHolder = $('#drawWriteCanvasHolder');
@@ -95,10 +132,9 @@ var drawWriteApp = (function () {
         return;
     }
 
-    // Create the menu element.
-
     // Initialize the canvas, add the listeners.
     function init() {
+        tool = TOOL_ENUM.HAND;
         makeCanvas();
         if(null === canvas) {
             return;
@@ -107,7 +143,8 @@ var drawWriteApp = (function () {
         ctx.lineJoin = 'round';
         ctx.lineWidth = 3;
         pointRadius = ctx.lineWidth / 2 + ctx.lineWidth % 2;
-        addListeners();
+        addCanvasListeners();
+        addMenuListeners();
     }
 
     // Return an object with the init function mapped to init.
