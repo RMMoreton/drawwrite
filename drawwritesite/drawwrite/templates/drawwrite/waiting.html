@@ -18,19 +18,27 @@
 
     <body>
         <div class="container">
-            <h1>Players in this game:</h1>
-            <ul id="name-list">
-            {% for player in allPlayers %}
-                <li>{{player.name}}</li>
-            {% endfor %}
-            </ul>
-            <button onclick="checkGameStart()">Refresh</button>
-            {% if created %}
-                <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
-                    {% csrf_token %}
-                    <button>Start Game</button>
-                </form>
-            {% endif %}
+            <div class="row">
+                <h1 class="col-xs-12 text-center">Players in this game:</h1>
+            </div>
+            <div class="row">
+                <div class="col-xs-1 col-sm-2 col-md-3"></div>
+                <div class="col-xs-10 col-sm-8 col-md-6">
+                    <ul id="name-list">
+                        {% for player in allPlayers %}
+                            <li>{{player.name}}</li>
+                        {% endfor %}
+                    </ul>
+                    <button class="btn btn-default col-xs-12 col-sm-6" onclick="checkGameStart()">Refresh</button>
+                    {% if created %}
+                        <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-default col-xs-12 col-sm-6">Start Game</button>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="col-xs-1 col-sm-2 col-md-3"></div>
+            </div>
         </div>
     </body>
 

@@ -10,7 +10,6 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/index.css' %}">
 
         <script src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}" type="text/javascript"></script>
         <script src="{% static 'drawwrite/js/drawStuff.js' %}" type="text/javascript"></script>
@@ -29,29 +28,46 @@
 
     <body>
         <div class="container">
-            <div class="previosLink">
-                {% if prevLinkType == 'write' %}
-                <p>{{ prevLink.text }}</p>
-                {% else %}
-                <img src="{{ prevLink.f.url }}">
-                {% endif %}
-            </div>
+            {% if prevLinkType != '' %}
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10 text-center">
+                        {% if prevLinkType == 'write' %}
+                            <p>{{ prevLink.text }}</p>
+                        {% else %}
+                            <img src="{{ prevLink.f.url }}">
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+            {% endif %}
 
             <form id="postForm" action="{% url 'drawwrite:createLink' playerId %}" method="post">
                 {% csrf_token %}
-                <div class="currentLink">
-                    {% if prevLinkType == 'write' %}
-                    <div>
-                        <canvas id="drawWriteCanvas" width="500px" height="500px">
+                {% if prevLinkType == 'write' %}
+                    <div class="text-center">
+                        <p>Visualize the text above, then use this canvas to draw what you visualized.</p>
+                        <canvas id="drawWriteCanvas" width="500px" height="500px" style="border: 1px solid black;">
                             If you can see this, then this app will not work in your browser. Sorry!
                         </canvas>
                     </div>
                     <input id="imgDataHolder" type="hidden" name="drawing">
-                    {% else %}
-                    <input type="text" name="description">
-                    {% endif %}
+                {% endif %}
+                {% if prevLinkType == 'draw' or prevLinkType == '' %}
+                    <div class="row">
+                        <div class="col-xs-1 col-md-2"></div>
+                        <div class="form-group col-xs-10 col-md-8">
+                            <label for="id_description">Your description:</label>
+                            <textarea class="form-control" name="description" id="id_description"></textarea>
+                        </div>
+                        <div class="col-xs-1 col-md-2"></div>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-xs-1 col-sm-5"></div>
+                    <input class="btn btn-default col-xs-10 col-sm-2" type="submit" value="Submit">
+                    <div class="col-xs-1 col-sm-5"></div>
                 </div>
-                <input type="submit" value="Submit">
             </form>
         </div>
     </body>
