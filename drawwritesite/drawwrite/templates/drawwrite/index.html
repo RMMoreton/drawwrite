@@ -16,33 +16,34 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     <h1 class="text-center">DrawWrite!</h1>
-                </div>
-            </div>
-            {% if errorTitle %}
-                <div class="error">
-                    <h2>{{errorTitle}}</h2>
-                    <p>{{errorDescription}}</p>
-                </div>
-            {% endif %}
 
-            <div class="row">
-                <div class="col-xs-1 col-sm-2 col-md-3"></div>
-                <form method="post" class="col-xs-10 col-sm-8 col-md-6">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="{{ form.username.id_for_label }}">Username:</label>
-                        {{ form.username|add_class:"form-control" }}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.gamename.id_for_label }}">Game name:</label>
-                        {{ form.gamename|add_class:"form-control" }}
-                    </div>
-                    <button type="submit" class="btn btn-default col-xs-12 col-sm-6" formaction="{% url 'drawwrite:joinGame'%}">Join</button>
-                    <button type="submit" class="btn btn-default col-xs-12 col-sm-6" formaction="{% url 'drawwrite:createGame' %}">Create</button>
-                </form>
-                <div class="col-xs-1 col-sm-2 col-md-3"></div>
+                    {% if errorTitle %}
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h2 class="panel-title">{{errorTitle}}</h2>
+                            </div>
+                            <div class="panel-body">
+                                <p>{{errorDescription}}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.username.id_for_label }}">Username:</label>
+                            {{ form.username|add_class:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.gamename.id_for_label }}">Game name:</label>
+                            {{ form.gamename|add_class:"form-control" }}
+                        </div>
+                        <button type="submit" class="btn btn-default col-xs-12 col-sm-6" formaction="{% url 'drawwrite:joinGame'%}">Join</button>
+                        <button type="submit" class="btn btn-default col-xs-12 col-sm-6" formaction="{% url 'drawwrite:createGame' %}">Create</button>
+                    </form>
+                </div>
             </div>
         </div>
     </body>

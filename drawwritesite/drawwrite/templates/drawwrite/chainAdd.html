@@ -28,47 +28,42 @@
 
     <body>
         <div class="container">
-            {% if prevLinkType != '' %}
-                <div class="row">
-                    <div class="col-xs-1"></div>
-                    <div class="col-xs-10 text-center">
-                        {% if prevLinkType == 'write' %}
-                            <p>{{ prevLink.text }}</p>
-                        {% else %}
-                            <img src="{{ prevLink.f.url }}">
-                        {% endif %}
-                    </div>
-                    <div class="col-xs-1"></div>
-                </div>
-            {% endif %}
-
-            <form id="postForm" action="{% url 'drawwrite:createLink' playerId %}" method="post">
-                {% csrf_token %}
-                {% if prevLinkType == 'write' %}
-                    <div class="text-center">
-                        <p>Visualize the text above, then use this canvas to draw what you visualized.</p>
-                        <canvas id="drawWriteCanvas" width="500px" height="500px" style="border: 1px solid black;">
-                            If you can see this, then this app will not work in your browser. Sorry!
-                        </canvas>
-                    </div>
-                    <input id="imgDataHolder" type="hidden" name="drawing">
-                {% endif %}
-                {% if prevLinkType == 'draw' or prevLinkType == '' %}
-                    <div class="row">
-                        <div class="col-xs-1 col-md-2"></div>
-                        <div class="form-group col-xs-10 col-md-8">
-                            <label for="id_description">Your description:</label>
-                            <textarea class="form-control" name="description" id="id_description"></textarea>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                    {% if prevLinkType != '' %}
+                        <div class="text-center">
+                            {% if prevLinkType == 'write' %}
+                                <p>{{ prevLink.text }}</p>
+                            {% else %}
+                                <img src="{{ prevLink.f.url }}">
+                            {% endif %}
                         </div>
-                        <div class="col-xs-1 col-md-2"></div>
-                    </div>
-                {% endif %}
-                <div class="row">
-                    <div class="col-xs-1 col-sm-5"></div>
-                    <input class="btn btn-default col-xs-10 col-sm-2" type="submit" value="Submit">
-                    <div class="col-xs-1 col-sm-5"></div>
+                    {% endif %}
+
+                    <form id="postForm" action="{% url 'drawwrite:createLink' playerId %}" method="post">
+                        {% csrf_token %}
+
+                        {% if prevLinkType == 'write' %}
+                            <div class="text-center" width="500px">
+                                <p>Visualize the text above, then use this canvas to draw what you visualized.</p>
+                                <canvas id="drawWriteCanvas" width="500px" height="500px" style="border: 1px solid black;">
+                                    If you can see this, then this app will not work in your browser. Sorry!
+                                </canvas>
+                            </div>
+                            <input id="imgDataHolder" type="hidden" name="drawing">
+                        {% endif %}
+
+                        {% if prevLinkType == 'draw' or prevLinkType == '' %}
+                            <div class="form-group">
+                                <label for="id_description">Your description:</label>
+                                <textarea class="form-control" name="description" id="id_description"></textarea>
+                            </div>
+                        {% endif %}
+
+                        <input class="btn btn-default" type="submit" value="Submit">
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </body>
 

@@ -14,17 +14,21 @@
 
     <body>
         <div class="container">
-            <ul>
-            {% for link in links %}
-                <li>
-                {% if link.f %}
-                    <img src="{{ link.f.url }}">
-                {% elif link.text %}
-                    <p>{{ link.text }}</p>
-                {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                    <ul>
+                    {% for link in links %}
+                        <li>
+                        {% if link.f %}
+                            <img src="{{ link.f.url }}">
+                        {% elif link.text %}
+                            <p>{{ link.text }}</p>
+                        {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
     </body>
 

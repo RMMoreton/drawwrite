@@ -15,16 +15,14 @@
     <body>
         <div class="container">
             <div class="row">
-                <h1 class="col-xs-12 text-center">{{ gameName }}</h1>
-            </div>
-            <div class="row">
-                <div class="col-xs-1 col-sm-2 col-md-3"></div>
-                <ul class="col-xs-10 col-sm-8 col-md-6">
-                    {% for player in players %}
-                        <li><a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a></li>
-                    {% endfor %}
-                </ul>
-                <div class="col-xs-1 col-sm-2 col-md-3"></div>
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                    <h1 class="text-center">{{ gameName }}</h1>
+                    <ul class="col-xs-12 col-sm-10 col-sm-offset-1">
+                        {% for player in players %}
+                            <li><a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </body>

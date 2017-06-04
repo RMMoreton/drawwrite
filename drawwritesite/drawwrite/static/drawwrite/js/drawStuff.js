@@ -12,25 +12,28 @@ var drawWriteApp = (function () {
         if(wasPath === true) {
             wasPath = false;
         } else {
+            var offsets = $(this).offset()
             ctx.beginPath();
-            ctx.arc(e.pageX-this.offsetLeft, e.pageY-this.offsetTop, pointRadius, 0, 2*Math.PI);
+            ctx.arc(e.pageX-offsets.left, e.pageY-offsets.top, pointRadius, 0, 2*Math.PI);
             ctx.fill();
         }
     }
 
     // Start painting, and initalize the two 'previous' positions.
     function startPath(e) {
+        var offsets = $(this).offset()
         paint = true;
-        prevX = (e.type === 'touchstart' ? e.changedTouches[0].pageX : e.pageX) - this.offsetLeft;
-        prevY = (e.type === 'touchstart' ? e.changedTouches[0].pageY : e.pageY) - this.offsetTop;
+        prevX = (e.type === 'touchstart' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
+        prevY = (e.type === 'touchstart' ? e.changedTouches[0].pageY : e.pageY) - offsets.top;
     }
 
     // If we're painting, draw a line  between the previous point and the current point,
     // then update the current point.
     function continuePath(e) {
         if(paint) {
-            var mX = (e.type === 'touchmove' ? e.changedTouches[0].pageX : e.pageX) - this.offsetLeft;
-            var mY = (e.type === 'touchmove' ? e.changedTouches[0].pageY : e.pageY) - this.offsetTop;
+            var offsets = $(this).offset()
+            var mX = (e.type === 'touchmove' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
+            var mY = (e.type === 'touchmove' ? e.changedTouches[0].pageY : e.pageY) - offsets.top;
 
             if(mX !== prevX || mY !== prevY) {
                 wasPath = true;
