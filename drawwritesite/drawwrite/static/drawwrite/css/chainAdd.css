@@ -1,8 +1,8 @@
-#drawWriteCanvasWrapper {
+#drawwriteCanvasWrapper {
     position: relative;
 }
 
-#drawWriteCanvas {
+#drawwriteCanvas {
     border: 1px solid black;
 }
 

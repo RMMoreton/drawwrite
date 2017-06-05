@@ -12,9 +12,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/chainAdd.css' %}">
 
-        <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'drawwrite/js/bootstrap.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'drawwrite/js/chainAdd.js' %}"></script>
+        <script type="text/javascript" src="{% static 'drawwrite/js/jquery/jquery-3.2.1.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'drawwrite/js/bootstrap/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'drawwrite/js/page/chainAdd.js' %}"></script>
     </head>
 
     <body>
@@ -24,7 +24,7 @@
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     {% if prevLinkType != '' %}
                         {% if prevLinkType == 'write' %}
-                            <p class="well">{{ prevLink.text }}</p>
+                            <p>{{ prevLink.text }}</p>
                         {% else %}
                             <img src="{{ prevLink.f.url }}">
                         {% endif %}
@@ -35,13 +35,13 @@
 
                         {% if prevLinkType == 'write' %}
                             <p>Visualize the text above, then use this canvas to draw what you visualized.</p>
-                            <div id="drawWriteCanvasWrapper">
+                            <div id="drawwriteCanvasWrapper">
                                 <div class="canvas-menu">
                                     <div id="drawToolButton" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </div>
                                 </div>
-                                <div id="drawWriteCanvasHolder">
+                                <div id="drawwriteCanvasHolder">
                                 </div>
                             </div>
                             <input id="imgDataHolder" type="hidden" name="drawing">

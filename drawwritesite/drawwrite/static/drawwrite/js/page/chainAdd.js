@@ -7,7 +7,7 @@ var canvasExists = (function () {
 
     // Return whether the canvas exists or not.
     function test() {
-        if($('#drawWriteCanvasWrapper').length > 0) {
+        if($('#drawwriteCanvasWrapper').length > 0) {
             return true;
         } else {
             return false;
@@ -143,12 +143,12 @@ var initCanvas = (function () {
         addedMenuListeners = true;
     }
 
-    // Create the canvas element, and make it the only child of the #drawWriteCanvasHolder div.
+    // Create the canvas element, and make it the only child of the #drawwriteCanvasHolder div.
     function makeCanvas() {
-        var canvasHolder = $('#drawWriteCanvasHolder');
+        var canvasHolder = $('#drawwriteCanvasHolder');
         //canvasHolder.first().empty();
         canvas = document.createElement('canvas');
-        canvas.id = 'drawWriteCanvas';
+        canvas.id = 'drawwriteCanvas';
         canvas.width = canvasHolder.width();
         canvas.height = 500;
         canvasHolder.first().append(canvas);
@@ -187,7 +187,7 @@ var initMisc = (function () {
 
     // Function to turn a canvas into a data-url.
     function makeDataUrl(e) {
-        var canvas = document.getElementById('drawWriteCanvas');
+        var canvas = document.getElementById('drawwriteCanvas');
         var data = canvas.toDataURL('image/png');
         $('#imgDataHolder').attr('value', data);
     }
