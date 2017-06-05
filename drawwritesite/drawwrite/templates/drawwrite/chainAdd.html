@@ -8,9 +8,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/chainAdd.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/page/chainAdd.css' %}">
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery/jquery-3.2.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'drawwrite/js/bootstrap/bootstrap.min.js' %}"></script>
@@ -26,7 +28,7 @@
                         {% if prevLinkType == 'write' %}
                             <p>{{ prevLink.text }}</p>
                         {% else %}
-                            <img src="{{ prevLink.f.url }}">
+                            <img class="boxed" src="{{ prevLink.f.url }}">
                         {% endif %}
                     {% endif %}
 
@@ -41,7 +43,7 @@
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </div>
                                 </div>
-                                <div id="drawwriteCanvasHolder">
+                                <div class="boxed" id="drawwriteCanvasHolder">
                                 </div>
                             </div>
                             <input id="imgDataHolder" type="hidden" name="drawing">

@@ -6,6 +6,7 @@ local/
 pip-selfcheck.json
 pyvenv.cfg
 drawwritesite/db/
+drawwritesite/favicon/
 drawwritesite/media/
 drawwritesite/static/
 drawwritesite/drawwritesite/settings.py
