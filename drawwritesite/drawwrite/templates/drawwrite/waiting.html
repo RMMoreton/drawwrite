@@ -23,7 +23,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-                    <h1 class="text-center">Players in this game:</h1>
+                    <h3 class="text-center">Players in this game:</h3>
 
                     <ul id="nameList">
                         {% for player in allPlayers %}
@@ -31,8 +31,17 @@
                         {% endfor %}
                     </ul>
 
-                    <button id="getNameList" class="btn btn-default col-xs-12 col-sm-6">Refresh</button>
-                    {% if created %}
+                    {% if created == True %}
+                        <p>Check for new players by pressing 'Update Player List' (auto-update is every 5 seconds)</p>
+                        <p>Start the game by pressing 'Start Game'</p>
+                    {% else %}
+                        <p>You're waiting for <strong>{{ creator.name }}</strong> to start the game</p>
+                        <p>The page checks if the game has started every 5 seconds, and you can manually check by clicking
+                        'Update Player List'</p>
+                    {% endif %}
+
+                    <button id="getNameList" class="btn btn-default col-xs-12 col-sm-6">Update Player List</button>
+                    {% if created == True %}
                         <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
                             {% csrf_token %}
                             <button class="btn btn-default col-xs-12 col-sm-6">Start Game</button>

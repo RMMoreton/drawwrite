@@ -13,6 +13,7 @@ var drawwriteRoundWaiting = (function () {
     // Attach event listeners.
     function attachEventListeners() {
         $('#checkRoundCompletion').on('click', checkRoundComplete);
+        window.setInterval(checkRoundComplete, 5000);
     }
 
     return {

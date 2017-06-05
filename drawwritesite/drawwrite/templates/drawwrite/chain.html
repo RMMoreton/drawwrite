@@ -12,23 +12,26 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/page/chain.css' %}">
     </head>
 
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                    <h3>{{ player.name }}'s chain:</h3>
                     <ul>
                     {% for link in links %}
                         <li>
                         {% if link.f %}
-                            <img src="{{ link.f.url }}">
+                            <img class="boxed scaleImage" src="{{ link.f.url }}">
                         {% elif link.text %}
                             <p>{{ link.text }}</p>
                         {% endif %}
                         </li>
                     {% endfor %}
                     </ul>
+                    <a href="{% url 'drawwrite:showGame' player.game.pk %}">Back</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,8 @@
+.boxed {
+    border: 1px solid black;
+}
+
+.scaleImage {
+    max-width: 100%;
+    max-height: 100%;
+}

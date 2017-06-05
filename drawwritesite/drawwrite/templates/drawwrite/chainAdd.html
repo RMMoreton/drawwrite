@@ -26,9 +26,11 @@
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     {% if prevLinkType != '' %}
                         {% if prevLinkType == 'write' %}
+                            <h3>Previous player's writing:</h3>
                             <p>{{ prevLink.text }}</p>
                         {% else %}
-                            <img class="boxed" src="{{ prevLink.f.url }}">
+                            <h3>Previous player's drawing:</h3>
+                            <img class="boxed scaleImage" src="{{ prevLink.f.url }}">
                         {% endif %}
                     {% endif %}
 
@@ -36,7 +38,7 @@
                         {% csrf_token %}
 
                         {% if prevLinkType == 'write' %}
-                            <p>Visualize the text above, then use this canvas to draw what you visualized.</p>
+                            <h3>Your drawing:</h3>
                             <div id="drawwriteCanvasWrapper">
                                 <div class="canvas-menu">
                                     <div id="drawToolButton" class="btn btn-default btn-sm">
@@ -50,8 +52,8 @@
                         {% endif %}
 
                         {% if prevLinkType == 'draw' or prevLinkType == '' %}
+                            <h3>Your writing:</h3>
                             <div class="form-group">
-                                <label for="id_description">Your description:</label>
                                 <textarea class="form-control" name="description" id="id_description"></textarea>
                             </div>
                         {% endif %}

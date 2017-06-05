@@ -18,12 +18,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-                    <h1 class="text-center">{{ gameName }}</h1>
-                    <ul class="col-xs-12 col-sm-10 col-sm-offset-1">
+                    <h3 class="text-center">{{ gameName }}</h3>
+                    <p>Click on a player's name to view the chain that they started.</p>
+                    <ul>
                         {% for player in players %}
                             <li><a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a></li>
                         {% endfor %}
                     </ul>
+                    <a href="{% url 'drawwrite:index' %}">Play again?</a>
                 </div>
             </div>
         </div>

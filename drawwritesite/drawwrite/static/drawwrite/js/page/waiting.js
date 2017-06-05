@@ -29,6 +29,7 @@ var drawwriteWaiting = (function () {
     // Attach an event listener to the 'refresh' button.
     function attachListeners() {
         $('#getNameList').on('click', checkGameStart);
+        window.setInterval(checkGameStart, 5000);
     }
 
     // Return an object holding the 'attachListeners' function.

@@ -47,8 +47,7 @@ def index(request):
 # joinGame {{{
 def joinGame(request):
     """
-    Show the user a page where they can input the name of the game they
-    would like to join.
+    Proccess data that a user sends when they want to join a game.
     """
     LOG.debug('entering join game view')
 
@@ -228,12 +227,20 @@ def play(request, playerId):
         allPlayers = Player.objects.filter(game=game)
         LOG.debug('got players in game with player {0}'.format(playerId))
 
+        # Get the creator of the game.
+        creator = None
+        for p in allPlayers:
+            if p.wasCreator:
+                creator = p
+        LOG.debug('creator of game is {0}'.format(creator.name))
+
         # Render the waiting screen with all of those players.
         LOG.debug('showing player {0} the waiting screen'.format(playerId))
         return render(request, 'drawwrite/waiting.html', {
             'allPlayers' : allPlayers,
             'playerId' : playerId,
             'created' : player.wasCreator,
+            'creator' : creator,
         })
     LOG.debug('game for player {0} has started'.format(playerId))
 
@@ -636,5 +643,6 @@ def showChain(request, playerId):
     # Render the chain view.
     return render(request, 'drawwrite/chain.html', {
         'links': links,
+        'player': player,
     })
 # }}}
