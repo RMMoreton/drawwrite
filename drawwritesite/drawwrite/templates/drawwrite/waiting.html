@@ -12,8 +12,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
-        <script type="text/javascript">var ajaxNameUrl = "{% url 'drawwrite:checkGameStart' playerId %}";</script>
         <script type="text/javascript" src="{% static 'drawwrite/js/waiting.js' %}"></script>
+
+        <script type="text/javascript">var drawwriteAjaxUrl = "{% url 'drawwrite:checkGameStart' playerId %}";</script>
     </head>
 
     <body>
@@ -22,13 +23,13 @@
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     <h1 class="text-center">Players in this game:</h1>
 
-                    <ul id="name-list">
+                    <ul id="nameList">
                         {% for player in allPlayers %}
                             <li>{{player.name}}</li>
                         {% endfor %}
                     </ul>
 
-                    <button class="btn btn-default col-xs-12 col-sm-6" onclick="checkGameStart()">Refresh</button>
+                    <button id="getNameList" class="btn btn-default col-xs-12 col-sm-6">Refresh</button>
                     {% if created %}
                         <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
                             {% csrf_token %}

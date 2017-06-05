@@ -12,8 +12,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
-        <script type="text/javascript">var checkUrl = "{% url 'drawwrite:checkGameDone' gameId %}";</script>
         <script type="text/javascript" src="{% static 'drawwrite/js/gameWaiting.js' %}"></script>
+
+        <script type="text/javascript">var drawwriteAjaxUrl = "{% url 'drawwrite:checkGameDone' gameId %}";</script>
     </head>
 
     <body>
@@ -21,7 +22,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     <h1 class="col-xs-12 text-center">Wait here for all players to finish the game</h1>
-                    <button class="btn btn-default col-xs-12 col-sm-8 col-sm-offset-2" onclick="checkGameDone()">Check for game completion</button>
+                    <button id="checkGameCompletion" class="btn btn-default col-xs-12 col-sm-8 col-sm-offset-2">Check for game completion</button>
                 </div>
             </div>
         </div>

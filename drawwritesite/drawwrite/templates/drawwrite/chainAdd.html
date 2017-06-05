@@ -14,32 +14,7 @@
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'drawwrite/js/bootstrap.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'drawwrite/js/drawStuff.js' %}"></script>
-        <script>
-            function makeDataUrl(e) {
-                var can = document.getElementById('drawWriteCanvas');
-                var data = can.toDataURL('image/png');
-                $('#imgDataHolder').attr('value', data);
-            }
-
-            $(document).ready(function () {
-                $('#postForm').submit(makeDataUrl);
-            });
-
-            $(document).ready(function() {
-                var canvasTop = $('.canvas-menu').offset().top;
-                var canvasPosition = canvasTop - $('.canvas-menu').parent().offset().top;
-                $(window).scroll(function () {
-                    var windowTop = $(window).scrollTop();
-                    var windowPosition = windowTop - canvasTop;
-                    if (windowTop > canvasTop) {
-                        $('.canvas-menu').css('top', windowPosition + 1);
-                    } else {
-                        $('.canvas-menu').css('top', canvasPosition);
-                    }
-                }
-            )});
-        </script>
+        <script type="text/javascript" src="{% static 'drawwrite/js/chainAdd.js' %}"></script>
     </head>
 
     <body>
@@ -62,13 +37,9 @@
                             <p>Visualize the text above, then use this canvas to draw what you visualized.</p>
                             <div id="drawWriteCanvasWrapper">
                                 <div class="canvas-menu">
-                                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <span id="canvas-menu-icon" class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li id="selectDrawTool"><a href="#">Draw</a></li>
-                                        <li id="selectHandTool"><a href="#">Scroll</a></li>
-                                    </ul>
+                                    <div id="drawToolButton" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </div>
                                 </div>
                                 <div id="drawWriteCanvasHolder">
                                 </div>

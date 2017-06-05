@@ -12,8 +12,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery-3.2.1.min.js' %}"></script>
-        <script type="text/javascript">var checkUrl = "{% url 'drawwrite:checkRoundDone' playerId %}";</script>
         <script type="text/javascript" src="{% static 'drawwrite/js/roundWaiting.js' %}"></script>
+
+        <script type="text/javascript">var drawwriteAjaxUrl = "{% url 'drawwrite:checkRoundDone' playerId %}";</script>
     </head>
 
     <body>
@@ -21,7 +22,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     <h1 class="text-center">Wait here for the round to complete.</h1>
-                    <button class="btn btn-default col-xs-12 col-sm-8 col-sm-offset-2" onclick="checkRoundDone()">Check Round Completion</button>
+                    <button id="checkRoundCompletion" class="btn btn-default col-xs-12 col-sm-8 col-sm-offset-2">Check Round Completion</button>
                 </div>
             </div>
         </div>

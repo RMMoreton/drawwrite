@@ -1,4 +1,26 @@
-var drawWriteApp = (function () {
+// Test whether the canvas wrapper exists on this page. If not, there's no
+// need to do anything.
+var canvasExists = (function () {
+
+    // Seems like a good idea.
+    "use strict";
+
+    // Return whether the canvas exists or not.
+    function test() {
+        if($('#drawWriteCanvasWrapper').length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    return {
+        test: test,
+    };
+}());
+
+// Set up the canvas for drawing, and the menu for selecting tools.
+var initCanvas = (function () {
 
     // Seems like a good idea I guess.
     "use strict";
@@ -15,13 +37,15 @@ var drawWriteApp = (function () {
     }
 
     // Switch the tool to the "draw" tool.
-    function switchToDrawTool(e) {
-        tool = TOOL_ENUM.DRAW;
-    }
-
-    // Switch the tool to the "hand" tool.
-    function switchToHandTool(e) {
-        tool = TOOL_ENUM.HAND;
+    function toggleDrawTool(e) {
+        var button = $('#drawToolButton');
+        if(tool === TOOL_ENUM.DRAW) {
+            tool = TOOL_ENUM.HAND;
+            button.removeClass('active');
+        } else if(tool === TOOL_ENUM.HAND) {
+            tool = TOOL_ENUM.DRAW;
+            button.addClass('active');
+        }
     }
 
     // Draw a dot where the user clicked. This does not get executed if the
@@ -115,8 +139,7 @@ var drawWriteApp = (function () {
         if(addedMenuListeners) {
             return;
         }
-        $('#selectDrawTool').on('click', switchToDrawTool);
-        $('#selectHandTool').on('click', switchToHandTool);
+        $('#drawToolButton').on('click', toggleDrawTool);
         addedMenuListeners = true;
     }
 
@@ -153,5 +176,70 @@ var drawWriteApp = (function () {
     };
 }());
 
-// On document ready, call drawWriteApp.init().
-$(document).ready(drawWriteApp.init);
+// Setup the menu stickyness and the conversion from a drawing to a file.
+var initMisc = (function () {
+
+    // Seems like a good idea.
+    "use strict";
+
+    // Variables!
+    var canvasTop, canvasLeft, canvasPositionTop, canvasPositionLeft;
+
+    // Function to turn a canvas into a data-url.
+    function makeDataUrl(e) {
+        var canvas = document.getElementById('drawWriteCanvas');
+        var data = canvas.toDataURL('image/png');
+        $('#imgDataHolder').attr('value', data);
+    }
+
+    // Keep the draw menu at the top-left corner.
+    function keepDrawMenuVisible() {
+        var windowTop = $(window).scrollTop();
+        var windowLeft = $(window).scrollLeft();
+        var windowPositionTop = windowTop - canvasTop;
+        var windowPositionLeft = windowLeft - canvasLeft;
+        if(windowTop > canvasTop) {
+            $('.canvas-menu').css('top', windowPositionTop + 1);
+        } else {
+            $('.canvas-menu').css('top', canvasPositionTop);
+        }
+        if(windowLeft > canvasLeft) {
+            $('.canvas-menu').css('left', windowPositionLeft + 1);
+        } else {
+            $('.canvas-menu').css('left', canvasPositionLeft);
+        }
+    }
+
+    // Attach event listeners.
+    function attachEventListeners() {
+        $('#postForm').submit(makeDataUrl);
+        $(window).scroll(keepDrawMenuVisible);
+    }
+
+    // Read the canvas position into variables.
+    function getCanvasPosition() {
+        canvasTop = $('.canvas-menu').offset().top;
+        canvasLeft = $('.canvas-menu').offset().left;
+        canvasPositionTop = canvasTop - $('.canvas-menu').parent().offset().top;
+        canvasPositionLeft = canvasLeft - $('.canvas-menu').parent().offset().left;
+    }
+
+    // Initialize variables, attach event handlers.
+    function init() {
+        getCanvasPosition();
+        attachEventListeners();
+    }
+
+    // Return the init function.
+    return {
+        init: init,
+    };
+}());
+
+// On document ready, initialize all the JS.
+$(document).ready(function () {
+    if(canvasExists.test()) {
+        initCanvas.init();
+        initMisc.init();
+    }
+});
