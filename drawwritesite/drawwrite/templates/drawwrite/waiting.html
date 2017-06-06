@@ -12,6 +12,7 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/page/waiting.css' %}">
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery/jquery-3.2.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'drawwrite/js/page/waiting.js' %}"></script>
@@ -23,29 +24,26 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-                    <h3 class="text-center">Players in this game:</h3>
+                    <h3 class="text-center">Lobby</h3>
 
-                    <ul id="nameList">
+                    <h4>Players:</h4>
+                    <div id="nameList">
                         {% for player in allPlayers %}
-                            <li>{{player.name}}</li>
+                            <div class="indented">
+                                {{ player.name }}
+                            </div>
                         {% endfor %}
-                    </ul>
+                    </div>
 
-                    {% if created == True %}
-                        <p>Check for new players by pressing 'Update Player List' (auto-update is every 5 seconds)</p>
-                        <p>Start the game by pressing 'Start Game'</p>
-                    {% else %}
-                        <p>You're waiting for <strong>{{ creator.name }}</strong> to start the game</p>
-                        <p>The page checks if the game has started every 5 seconds, and you can manually check by clicking
-                        'Update Player List'</p>
-                    {% endif %}
-
-                    <button id="getNameList" class="btn btn-default col-xs-12 col-sm-6">Update Player List</button>
                     {% if created == True %}
                         <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
                             {% csrf_token %}
-                            <button class="btn btn-default col-xs-12 col-sm-6">Start Game</button>
+                            <div class="topSpace">
+                                <button class="btn btn-default col-xs-12 col-sm-3 col-md-2">Start Game</button>
+                            </div>
                         </form>
+                    {% else %}
+                        <p class="topSpace">Once all players have joined, <strong>{{ creator }}</strong> will start the game!</p>
                     {% endif %}
                 </div>
             </div>

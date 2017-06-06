@@ -12,6 +12,7 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/page/gameWaiting.css' %}">
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery/jquery-3.2.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'drawwrite/js/page/gameWaiting.js' %}"></script>
@@ -23,8 +24,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-                    <h3 class="col-xs-12 text-center">Wait here for all players to finish the game</h3>
-                    <button id="checkGameCompletion" class="btn btn-default col-xs-12 col-sm-8 col-sm-offset-2">Check for game completion</button>
+                    <h3 class="text-center">Waiting Area</h3>
+                    <h4>Waiting for:</h4>
+                    <div class="stillPlayingWrapper"></div>
                 </div>
             </div>
         </div>

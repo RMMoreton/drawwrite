@@ -479,7 +479,7 @@ def createLink(request, playerId):
         LOG.debug('making new write link for player {0}'.format(playerId))
 
         # Make the new write link.
-        services.newWriteLink(chain, request.POST.get('description'))
+        services.newWriteLink(chain, request.POST.get('description'), player)
 
     else:
         # The POST data needs to have the 'drawing' field or something
@@ -513,7 +513,7 @@ def createLink(request, playerId):
         LOG.debug('made file with name {0}')
 
         # Make the draw link.
-        services.newDrawLink(chain, fileObj)
+        services.newDrawLink(chain, fileObj, player)
         LOG.debug('created draw link, file has name {0}')
 
     # Increase the 'numPlayersFinishedCurrentRound' of this game.
@@ -526,7 +526,8 @@ def createLink(request, playerId):
 # checkRoundDone {{{
 def checkRoundDone(request, playerId):
     """
-    Check if the round of the current game is completed.
+    Check if the round of the current game is completed. Return a javascript
+    object that has a list of every player's name that has not completed the round.
     """
     LOG.debug('checking if round is completed for player {0}'.format(playerId))
 
@@ -553,8 +554,26 @@ def checkRoundDone(request, playerId):
         return JsonResponse({'finished': True})
     LOG.debug('round is not completed')
 
+    # Get all players in the game who have not completed the
+    # current round.
+    try:
+        playersStillPlaying = Player.objects.filter(game=player.game).filter(currentRound__lt=player.currentRound)
+    except BaseException as e:
+        LOG.error(e)
+        raise
+    LOG.debug('got list of players still playing')
+
+    # Turn the players into a list of names.
+    namesStillPlaying = []
+    for p in playersStillPlaying:
+        namesStillPlaying.append(p.name)
+    LOG.debug('got list of names of players still playing')
+
     # Return an object saying that the round is not done.
-    return JsonResponse({'finished': False})
+    return JsonResponse({
+        'finished': False,
+        'stillPlaying': namesStillPlaying,
+    })
 # }}}
 
 # checkGameDone {{{
@@ -575,7 +594,24 @@ def checkGameDone(request, gameId):
     if game.roundNum == game.numPlayers:
         return JsonResponse({'finished': True})
 
-    return JsonResponse({'finished': False})
+    # Get a list of players whose current round equals the game's round.
+    try:
+        playersStillPlaying = Player.objects.filter(game=game).filter(currentRound=game.roundNum)
+    except BaseException as e:
+        LOG.error(e)
+        raise
+    LOG.debug('got list of players still playing')
+
+    # Turn that list of players into a list of names.
+    names = []
+    for p in playersStillPlaying:
+        names.append(p.name)
+    LOG.debug('created list of names of players still playing')
+
+    return JsonResponse({
+        'finished': False,
+        'stillPlaying': names,
+    })
 # }}}
 
 # showGame {{{

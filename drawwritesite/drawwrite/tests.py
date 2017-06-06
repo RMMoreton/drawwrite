@@ -205,9 +205,9 @@ class ChainTests(TestCase):
             game = services.newGame(name='test')
             player = services.newPlayer(game, 'test player', True)
             chain = services.newChain(player)
-            self.assertIs(services.newDrawLink(chain, self.getMockedFile()), None)
+            self.assertIs(services.newDrawLink(chain, self.getMockedFile(), player), None)
             chain.nextLinkPosition = 26
-            self.assertIs(services.newDrawLink(chain, self.getMockedFile()), None)
+            self.assertIs(services.newDrawLink(chain, self.getMockedFile(), player), None)
 
     def test_newDrawLink_with_odd_nextLinkPosition_returns_DrawLink(self):
         """
@@ -219,9 +219,9 @@ class ChainTests(TestCase):
             player = services.newPlayer(game, 'test player', True)
             chain = services.newChain(player)
             chain.nextLinkPosition = 1
-            self.assertIsInstance(services.newDrawLink(chain, self.getMockedFile()), DrawLink)
+            self.assertIsInstance(services.newDrawLink(chain, self.getMockedFile(), player), DrawLink)
             chain.nextLinkPosition = 27
-            self.assertIsInstance(services.newDrawLink(chain, self.getMockedFile()), DrawLink)
+            self.assertIsInstance(services.newDrawLink(chain, self.getMockedFile(), player), DrawLink)
 
     def test_newDrawLink_with_even_nextLinkPosition_does_not_increase_nextLinkPosition(self):
         """
@@ -232,10 +232,10 @@ class ChainTests(TestCase):
             game = services.newGame(name='test')
             player = services.newPlayer(game, 'test player', True)
             chain = services.newChain(player)
-            services.newDrawLink(chain, self.getMockedFile())
+            services.newDrawLink(chain, self.getMockedFile(), player)
             self.assertEqual(chain.nextLinkPosition, 0)
             chain.nextLinkPosition = 26
-            services.newDrawLink(chain, self.getMockedFile())
+            services.newDrawLink(chain, self.getMockedFile(), player)
             self.assertEqual(chain.nextLinkPosition, 26)
 
     def test_newDrawLink_with_odd_nextLinkPosition_inceases_nextLinkPosition(self):
@@ -248,10 +248,10 @@ class ChainTests(TestCase):
             player = services.newPlayer(game, 'test player', True)
             chain = services.newChain(player)
             chain.nextLinkPosition = 1
-            services.newDrawLink(chain, self.getMockedFile())
+            services.newDrawLink(chain, self.getMockedFile(), player)
             self.assertEqual(chain.nextLinkPosition, 2)
             chain.nextLinkPosition = 27
-            services.newDrawLink(chain, self.getMockedFile())
+            services.newDrawLink(chain, self.getMockedFile(), player)
             self.assertEqual(chain.nextLinkPosition, 28)
 
     def test_newDrawLink_creates_DrawLink_with_correct_linkPosition(self):
@@ -265,11 +265,11 @@ class ChainTests(TestCase):
             chain = services.newChain(player)
             chain.nextLinkPosition = 1
             expect = chain.nextLinkPosition
-            drawLink = services.newDrawLink(chain, self.getMockedFile())
+            drawLink = services.newDrawLink(chain, self.getMockedFile(), player)
             self.assertEqual(expect, drawLink.linkPosition)
             chain.nextLinkPosition = 27
             expect = chain.nextLinkPosition
-            drawLink = services.newDrawLink(chain, self.getMockedFile())
+            drawLink = services.newDrawLink(chain, self.getMockedFile(), player)
             self.assertEqual(expect, drawLink.linkPosition)
 
     def test_newWriteLink_with_even_nextLinkPosition_returns_WriteLink(self):
@@ -280,9 +280,9 @@ class ChainTests(TestCase):
         game = services.newGame(name='test')
         player = services.newPlayer(game, 'test player', True)
         chain = services.newChain(player)
-        self.assertIsInstance(services.newWriteLink(chain, 'fake text'), WriteLink)
+        self.assertIsInstance(services.newWriteLink(chain, 'fake text', player), WriteLink)
         chain.nextLinkPosition = 26
-        self.assertIsInstance(services.newWriteLink(chain, 'fake text'), WriteLink)
+        self.assertIsInstance(services.newWriteLink(chain, 'fake text', player), WriteLink)
 
     def test_newWriteLink_with_odd_nextLinkPosition_returns_None(self):
         """
@@ -293,9 +293,9 @@ class ChainTests(TestCase):
         player = services.newPlayer(game, 'test player', True)
         chain = services.newChain(player)
         chain.nextLinkPosition = 1
-        self.assertIs(services.newWriteLink(chain, 'fake text'), None)
+        self.assertIs(services.newWriteLink(chain, 'fake text', player), None)
         chain.nextLinkPosition = 27
-        self.assertIs(services.newWriteLink(chain, 'fake text'), None)
+        self.assertIs(services.newWriteLink(chain, 'fake text', player), None)
 
     def test_newWriteLink_with_even_nextLinkPosition_increases_nextLinkPosition(self):
         """
@@ -305,10 +305,10 @@ class ChainTests(TestCase):
         game = services.newGame(name='test')
         player = services.newPlayer(game, 'test player', True)
         chain = services.newChain(player)
-        services.newWriteLink(chain, 'fake text')
+        services.newWriteLink(chain, 'fake text', player)
         self.assertEqual(chain.nextLinkPosition, 1)
         chain.nextLinkPosition = 26
-        services.newWriteLink(chain, 'fake text')
+        services.newWriteLink(chain, 'fake text', player)
         self.assertEqual(chain.nextLinkPosition, 27)
 
     def test_newWriteLink_with_odd_nextLinkPosition_does_not_increase_nextLinkPosition(self):
@@ -320,10 +320,10 @@ class ChainTests(TestCase):
         player = services.newPlayer(game, 'test player', True)
         chain = services.newChain(player)
         chain.nextLinkPosition = 1
-        services.newWriteLink(chain, 'fake text')
+        services.newWriteLink(chain, 'fake text', player)
         self.assertEqual(chain.nextLinkPosition, 1)
         chain.nextLinkPosition = 27
-        services.newWriteLink(chain, 'fake text')
+        services.newWriteLink(chain, 'fake text', player)
         self.assertEqual(chain.nextLinkPosition, 27)
 
     def test_newWriteLink_creates_WriteLink_with_correct_linkPosition(self):
@@ -335,11 +335,11 @@ class ChainTests(TestCase):
         player = services.newPlayer(game, 'test player', True)
         chain = services.newChain(player)
         expect = chain.nextLinkPosition
-        writeLink = services.newWriteLink(chain, 'fake text')
+        writeLink = services.newWriteLink(chain, 'fake text', player)
         self.assertEqual(expect, writeLink.linkPosition)
         chain.nextLinkPosition = 26
         expect = chain.nextLinkPosition
-        writeLink = services.newWriteLink(chain, 'fake text')
+        writeLink = services.newWriteLink(chain, 'fake text', player)
         self.assertEqual(expect, writeLink.linkPosition)
 # }}}
 

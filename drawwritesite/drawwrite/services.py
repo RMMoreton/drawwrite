@@ -137,7 +137,7 @@ def newChain(player):
 
 # newDrawLink {{{
 @transaction.atomic
-def newDrawLink(chain, fileObj):
+def newDrawLink(chain, fileObj, addedBy):
     """
     Return a new draw link for the passed chain, or None if the next link
     for the passed chain shouldn't be a draw link.
@@ -147,7 +147,7 @@ def newDrawLink(chain, fileObj):
         LOG.error('attempted to create draw link at an invalid position')
         return None
     ret = DrawLink(f=fileObj, linkPosition=chain.nextLinkPosition,
-            chain=chain)
+            chain=chain, addedBy = addedBy)
     ret.save()
     LOG.debug('saved new draw link')
     chain.nextLinkPosition += 1
@@ -158,7 +158,7 @@ def newDrawLink(chain, fileObj):
 
 # newWriteLink {{{
 @transaction.atomic
-def newWriteLink(chain, text):
+def newWriteLink(chain, text, addedBy):
     """
     Return a new write link for the passed chain, or None if the next link
     for the passed chain shouldn't be a write link.
@@ -168,7 +168,7 @@ def newWriteLink(chain, text):
         LOG.error('attempted to create write link in invalid position')
         return None
     ret = WriteLink(text=text, linkPosition=chain.nextLinkPosition,
-            chain=chain)
+            chain=chain, addedBy=addedBy)
     ret.save()
     LOG.debug('saved new write link')
     chain.nextLinkPosition += 1

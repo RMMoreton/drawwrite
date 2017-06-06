@@ -25,40 +25,48 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     {% if prevLinkType != '' %}
+                        <h3 class="text-center">Add</h3>
                         {% if prevLinkType == 'write' %}
-                            <h3>Previous player's writing:</h3>
-                            <p>{{ prevLink.text }}</p>
+                            <h4>Previous player's writing:</h4>
+                            <div class="indented">
+                                <p>{{ prevLink.text }}</p>
+                            </div>
                         {% else %}
-                            <h3>Previous player's drawing:</h3>
-                            <img class="boxed scaleImage" src="{{ prevLink.f.url }}">
+                            <h4>Previous player's drawing:</h4>
+                            <div class="indented">
+                                <img class="boxed scaleImage" src="{{ prevLink.f.url }}">
+                            </div>
                         {% endif %}
+                    {% else %}
+                        <h3 class="text-center">Start</h3>
                     {% endif %}
 
                     <form id="postForm" action="{% url 'drawwrite:createLink' playerId %}" method="post">
                         {% csrf_token %}
 
                         {% if prevLinkType == 'write' %}
-                            <h3>Your drawing:</h3>
+                            <h4>Your drawing:</h4>
                             <div id="drawwriteCanvasWrapper">
                                 <div class="canvas-menu">
                                     <div id="drawToolButton" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </div>
                                 </div>
-                                <div class="boxed" id="drawwriteCanvasHolder">
-                                </div>
+                                <div id="drawwriteCanvasHolder"></div>
                             </div>
                             <input id="imgDataHolder" type="hidden" name="drawing">
                         {% endif %}
 
                         {% if prevLinkType == 'draw' or prevLinkType == '' %}
-                            <h3>Your writing:</h3>
-                            <div class="form-group">
+                            <h4>Your writing:</h4>
+                            <div class="form-group indented">
                                 <textarea class="form-control" name="description" id="id_description"></textarea>
                             </div>
                         {% endif %}
 
-                        <input class="btn btn-default" type="submit" value="Submit">
+                        <div class="topSpace">
+                            <input class="btn btn-default col-xs-12 col-sm-3 col-md-2" type="submit" value="Submit">
+                        </div>
                     </form>
                 </div>
             </div>

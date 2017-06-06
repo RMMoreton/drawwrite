@@ -45,6 +45,7 @@ class DrawLink(models.Model):
     f = models.FileField('File')
     linkPosition = models.SmallIntegerField('Link Position')
     chain = models.ForeignKey('Chain', on_delete=models.CASCADE)
+    addedBy = models.ForeignKey('Player', on_delete=models.CASCADE)
 
 class WriteLink(models.Model):
     """
@@ -53,6 +54,7 @@ class WriteLink(models.Model):
     text = models.TextField('Description')
     linkPosition = models.SmallIntegerField('Link Position')
     chain = models.ForeignKey('Chain', on_delete=models.CASCADE)
+    addedBy = models.ForeignKey('Player', on_delete=models.CASCADE)
 
 class Chain(models.Model):
     """

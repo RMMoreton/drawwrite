@@ -12,6 +12,7 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/page/game.css' %}">
     </head>
 
     <body>
@@ -19,13 +20,15 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                     <h3 class="text-center">{{ gameName }}</h3>
-                    <p>Click on a player's name to view the chain that they started.</p>
-                    <ul>
-                        {% for player in players %}
-                            <li><a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    <a href="{% url 'drawwrite:index' %}">Play again?</a>
+                    <h4>Chains</h4>
+                    {% for player in players %}
+                        <div class="indented">
+                            <a href="{% url 'drawwrite:showChain' player.pk %}">{{ player.name }}</a>
+                        </div>
+                    {% endfor %}
+                    <div class="topSpace">
+                        <a href="{% url 'drawwrite:index' %}">Play again?</a>
+                    </div>
                 </div>
             </div>
         </div>

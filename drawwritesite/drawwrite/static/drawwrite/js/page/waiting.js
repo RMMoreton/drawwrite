@@ -6,10 +6,13 @@ var drawwriteWaiting = (function () {
     // Replace the list of names currently being shown.
     function replaceNames(names) {
         var listString = "";
+        $('#nameList').empty();
         for(var i = 0; i < names.length; i++) {
-            listString = listString + "<li>" + names[i] + "</li>\n";
+            var nameHolder = document.createElement('div');
+            nameHolder.innerText = names[i];
+            $(nameHolder).addClass('indented');
+            $('#nameList').append(nameHolder);
         }
-        $('#nameList').html(listString);
         return true;
     }
 
@@ -28,7 +31,6 @@ var drawwriteWaiting = (function () {
 
     // Attach an event listener to the 'refresh' button.
     function attachListeners() {
-        $('#getNameList').on('click', checkGameStart);
         window.setInterval(checkGameStart, 5000);
     }
 

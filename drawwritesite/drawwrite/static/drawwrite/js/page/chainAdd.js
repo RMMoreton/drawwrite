@@ -146,11 +146,11 @@ var initCanvas = (function () {
     // Create the canvas element, and make it the only child of the #drawwriteCanvasHolder div.
     function makeCanvas() {
         var canvasHolder = $('#drawwriteCanvasHolder');
-        //canvasHolder.first().empty();
         canvas = document.createElement('canvas');
         canvas.id = 'drawwriteCanvas';
         canvas.width = canvasHolder.width();
         canvas.height = 500;
+        $(canvas).addClass('boxed');
         canvasHolder.first().append(canvas);
         return;
     }

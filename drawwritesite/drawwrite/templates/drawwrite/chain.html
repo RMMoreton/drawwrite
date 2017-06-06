@@ -19,19 +19,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-                    <h3>{{ player.name }}'s chain:</h3>
-                    <ul>
+                    <h3 class="text-center">{{ player.name }}</h3>
                     {% for link in links %}
-                        <li>
-                        {% if link.f %}
-                            <img class="boxed scaleImage" src="{{ link.f.url }}">
-                        {% elif link.text %}
-                            <p>{{ link.text }}</p>
-                        {% endif %}
-                        </li>
+                        <div>
+                            {% if link.f %}
+                                <h4>{{ link.addedBy.name }} drew:</h4>
+                            {% elif link.text %}
+                                <h4>{{ link.addedBy.name }} wrote:</h4>
+                            {% endif %}
+                            {% if link.f %}
+                                <div class="indented">
+                                    <img class="boxed scaleImage" src="{{ link.f.url }}">
+                                </div>
+                            {% elif link.text %}
+                                <div class="indented">
+                                    <p>{{ link.text }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
                     {% endfor %}
-                    </ul>
-                    <a href="{% url 'drawwrite:showGame' player.game.pk %}">Back</a>
+                    <div class="topSpace">
+                        <a href="{% url 'drawwrite:showGame' player.game.pk %}">Back</a>
+                    </div>
                 </div>
             </div>
         </div>
