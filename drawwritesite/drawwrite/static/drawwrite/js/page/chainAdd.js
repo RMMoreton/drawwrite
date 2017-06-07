@@ -26,7 +26,8 @@ var initCanvas = (function () {
     "use strict";
 
     // Variables!
-    var canvas, ctx, pointRadius, paint, wasPath, prevX, prevY, init, tool, TOOL_ENUM, addedMenuListeners;
+    var canvas, ctx, pointRadius, paint, wasPath, prevX, prevY, init, tool, TOOL_ENUM, addedMenuListeners,
+        canvasStates, drawEvents, currentDrawEvent, undoParameter;
 
     addedMenuListeners = false;
 
@@ -36,7 +37,7 @@ var initCanvas = (function () {
         HAND: "hand",
     }
 
-    // Switch the tool to the "draw" tool.
+    // Toggle the "draw" tool.
     function toggleDrawTool(e) {
         var button = $('#drawToolButton');
         if(tool === TOOL_ENUM.DRAW) {
@@ -48,8 +49,8 @@ var initCanvas = (function () {
         }
     }
 
-    // Draw a dot where the user clicked. This does not get executed if the
-    // user draws a line.
+    // Draw a dot where the a touch ended. This does not get executed if the
+    // user draws a line (because wasPath will be set to true).
     function dot(e) {
         if(tool !== TOOL_ENUM.DRAW) {
             return;
@@ -61,6 +62,12 @@ var initCanvas = (function () {
             ctx.beginPath();
             ctx.arc(e.pageX-offsets.left, e.pageY-offsets.top, pointRadius, 0, 2*Math.PI);
             ctx.fill();
+            // Add data to the currentDrawEvent.
+            currentDrawEvent.type = 'dot';
+            currentDrawEvent.radius = pointRadius;
+            // Push currentDrawEvent onto drawEvents and set to null.
+            drawEvents.push(currentDrawEvent);
+            currentDrawEvent = null;
         }
     }
 
@@ -73,6 +80,16 @@ var initCanvas = (function () {
         paint = true;
         prevX = (e.type === 'touchstart' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
         prevY = (e.type === 'touchstart' ? e.changedTouches[0].pageY : e.pageY) - offsets.top;
+        // Save the state of the canvas if I need to.
+        if(canvasStates.length % undoParameter === 0) {
+            canvasStates.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+        }
+        // Initialize currentDrawEvent.
+        currentDrawEvent = {
+            path: [prevX, prevY],
+            type: 'path',
+            radius: ctx.lineWidth,
+        }
     }
 
     // If we're painting, draw a line  between the previous point and the current point,
@@ -98,24 +115,91 @@ var initCanvas = (function () {
                 prevX = mX;
                 prevY = mY;
             }
+
+            // Add prevX and prevY to the current draw event.
+            currentDrawEvent.path.push(prevX);
+            currentDrawEvent.path.push(prevY);
+
         }
         // Prevent the user from swiping left/right for navigation.
         e.preventDefault();
     }
 
-    // If we end on the canvas, don't unset wasPath, but do unset everything else.
+    // If we end on the canvas, don't unset wasPath (in case this was a click),
+    // but do unset everything else. If wasPath, push currentDrawEvent and set to null;
+    // if not, don't do either of those things.
     function endPathOnCanvas(e) {
+        if(!paint) {
+            return;
+        }
         paint = false;
         prevX = null;
         prevY = null;
+        if(wasPath) {
+            drawEvents.push(currentDrawEvent);
+            currentDrawEvent = null;
+        }
     }
 
-    // If we end off the canvas, then unset everything.
+    // If we end off the canvas, then unset everything. Also push the currentDrawEvent
+    // onto the drawEvents stack.
     function endPathOffCanvas(e) {
+        if(!paint) {
+            return;
+        }
         paint = false;
         wasPath = false;
         prevX = null;
         prevY = null;
+        drawEvents.push(currentDrawEvent);
+        currentDrawEvent = null;
+    }
+
+    // Undo the most recent drawing event.
+    function undo() {
+        // If there are no canvasStates, return.
+        if(canvasStates === null || canvasStates.length === 0) {
+            return;
+        }
+        // If there are no draw events, return.
+        if(drawEvents === null || drawEvents.length === 0) {
+            return;
+        }
+
+        drawEvents.pop();
+        var numToRedraw = drawEvents.length % undoParameter;
+        if(numToRedraw === 0) {
+            var restore = canvasStates.pop();
+            ctx.putImageData(restore, 0, 0);
+        } else {
+            var restore = canvasStates[canvasStates.length - 1];
+            ctx.putImageData(restore, 0, 0);
+            for(var i = 0; i < numToRedraw; i++) {
+                redraw(drawEvents[drawEvents.length - numToRedraw+i]);
+            }
+        }
+    }
+
+    // Redraw a drawEvent.
+    function redraw(drawEvent) {
+        if(drawEvent.type === 'dot') {
+            ctx.beginPath();
+            ctx.arc(drawEvent.path[0], drawEvent.path[1], drawEvent.radius, 0, 2*Math.PI);
+            ctx.fill();
+        } else if(drawEvent.type === 'path') {
+            // Save current line width.
+            var currentLineWidth = ctx.lineWidth;
+            ctx.lineWidth = drawEvent.radius;
+            for(var i = 0; i < drawEvent.path.length - 2; i += 2) {
+                ctx.beginPath();
+                ctx.moveTo(drawEvent.path[i], drawEvent.path[i+1]);
+                ctx.lineTo(drawEvent.path[i+2], drawEvent.path[i+3]);
+                ctx.closePath();
+                ctx.stroke();
+            }
+            // Restore line width.
+            ctx.lineWidth = currentLineWidth;
+        }
     }
 
     // Add all the event listeners.
@@ -158,6 +242,11 @@ var initCanvas = (function () {
     // Initialize the canvas, add the listeners.
     function init() {
         tool = TOOL_ENUM.HAND;
+
+        canvasStates = new Array();
+        drawEvents = new Array();
+        undoParameter = 50;
+
         makeCanvas();
         if(null === canvas) {
             return;
@@ -166,13 +255,23 @@ var initCanvas = (function () {
         ctx.lineJoin = 'round';
         ctx.lineWidth = 3;
         pointRadius = ctx.lineWidth / 2 + ctx.lineWidth % 2;
+
         addCanvasListeners();
         addMenuListeners();
+    }
+
+    function getCanvasStates() {
+        return canvasStates;
+    }
+
+    function getDrawEvents() {
+        return drawEvents;
     }
 
     // Return an object with the init function mapped to init.
     return {
         init: init,
+        undo: undo,
     };
 }());
 
