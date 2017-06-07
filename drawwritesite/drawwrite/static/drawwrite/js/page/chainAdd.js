@@ -78,6 +78,7 @@ var initCanvas = (function () {
         }
         var offsets = $(this).offset()
         paint = true;
+        wasPath = false;
         prevX = (e.type === 'touchstart' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
         prevY = (e.type === 'touchstart' ? e.changedTouches[0].pageY : e.pageY) - offsets.top;
         // Save the state of the canvas if I need to.
@@ -99,7 +100,6 @@ var initCanvas = (function () {
             return;
         }
         if(paint) {
-            console.log('continue');
             var offsets = $(this).offset()
             var mX = (e.type === 'touchmove' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
             var mY = (e.type === 'touchmove' ? e.changedTouches[0].pageY : e.pageY) - offsets.top;
@@ -130,7 +130,6 @@ var initCanvas = (function () {
     // but do unset everything else. If wasPath, push currentDrawEvent and set to null;
     // if not, don't do either of those things.
     function endPathOnCanvas(e) {
-        console.log('endOn');
         if(!paint) {
             return;
         }
@@ -146,7 +145,6 @@ var initCanvas = (function () {
     // If we end off the canvas, then unset everything. Also push the currentDrawEvent
     // onto the drawEvents stack.
     function endPathOffCanvas(e) {
-        console.log('endOff');
         if(!paint) {
             return;
         }
@@ -218,9 +216,7 @@ var initCanvas = (function () {
         canvas.addEventListener('touchstart', startPath);
         canvas.addEventListener('touchmove', continuePath);
         canvas.addEventListener('touchend', endPathOnCanvas);
-        canvas.addEventListener('touchend', dot);
         canvas.addEventListener('touchcancel', endPathOffCanvas);
-        canvas.addEventListener('touchcancel', dot);
     }
 
     // Add menu listeners if we haven't already.
