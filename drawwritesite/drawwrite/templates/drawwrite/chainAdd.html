@@ -47,9 +47,12 @@
                         {% if prevLinkType == 'write' %}
                             <h4>Your drawing:</h4>
                             <div id="drawwriteCanvasWrapper">
-                                <div class="canvas-menu">
+                                <div class="btn-group canvas-menu">
                                     <div id="drawToolButton" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-pencil"></span>
+                                    </div>
+                                    <div class="undoToolButton btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
                                     </div>
                                 </div>
                                 <div id="drawwriteCanvasHolder"></div>

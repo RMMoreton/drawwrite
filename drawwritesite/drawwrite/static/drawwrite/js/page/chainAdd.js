@@ -81,7 +81,7 @@ var initCanvas = (function () {
         prevX = (e.type === 'touchstart' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
         prevY = (e.type === 'touchstart' ? e.changedTouches[0].pageY : e.pageY) - offsets.top;
         // Save the state of the canvas if I need to.
-        if(canvasStates.length % undoParameter === 0) {
+        if(drawEvents.length % undoParameter === 0) {
             canvasStates.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
         }
         // Initialize currentDrawEvent.
@@ -99,6 +99,7 @@ var initCanvas = (function () {
             return;
         }
         if(paint) {
+            console.log('continue');
             var offsets = $(this).offset()
             var mX = (e.type === 'touchmove' ? e.changedTouches[0].pageX : e.pageX) - offsets.left;
             var mY = (e.type === 'touchmove' ? e.changedTouches[0].pageY : e.pageY) - offsets.top;
@@ -129,6 +130,7 @@ var initCanvas = (function () {
     // but do unset everything else. If wasPath, push currentDrawEvent and set to null;
     // if not, don't do either of those things.
     function endPathOnCanvas(e) {
+        console.log('endOn');
         if(!paint) {
             return;
         }
@@ -144,6 +146,7 @@ var initCanvas = (function () {
     // If we end off the canvas, then unset everything. Also push the currentDrawEvent
     // onto the drawEvents stack.
     function endPathOffCanvas(e) {
+        console.log('endOff');
         if(!paint) {
             return;
         }
@@ -215,7 +218,9 @@ var initCanvas = (function () {
         canvas.addEventListener('touchstart', startPath);
         canvas.addEventListener('touchmove', continuePath);
         canvas.addEventListener('touchend', endPathOnCanvas);
+        canvas.addEventListener('touchend', dot);
         canvas.addEventListener('touchcancel', endPathOffCanvas);
+        canvas.addEventListener('touchcancel', dot);
     }
 
     // Add menu listeners if we haven't already.
@@ -224,6 +229,7 @@ var initCanvas = (function () {
             return;
         }
         $('#drawToolButton').on('click', toggleDrawTool);
+        $('.undoToolButton').on('click', undo);
         addedMenuListeners = true;
     }
 
@@ -271,7 +277,7 @@ var initCanvas = (function () {
     // Return an object with the init function mapped to init.
     return {
         init: init,
-        undo: undo,
+        canvasStates: getCanvasStates,
     };
 }());
 
@@ -282,7 +288,7 @@ var initMisc = (function () {
     "use strict";
 
     // Variables!
-    var canvasTop, canvasLeft, canvasPositionTop, canvasPositionLeft;
+    var canvasTop, canvasLeft;
 
     // Function to turn a canvas into a data-url.
     function makeDataUrl(e) {
@@ -294,33 +300,31 @@ var initMisc = (function () {
     // Keep the draw menu at the top-left corner.
     function keepDrawMenuVisible() {
         var windowTop = $(window).scrollTop();
-        var windowLeft = $(window).scrollLeft();
-        var windowPositionTop = windowTop - canvasTop;
-        var windowPositionLeft = windowLeft - canvasLeft;
         if(windowTop > canvasTop) {
-            $('.canvas-menu').css('top', windowPositionTop + 1);
+            if($('.canvas-menu').css('position') !== 'fixed') {
+                $('.canvas-menu').css('position', 'fixed');
+                $('.canvas-menu').css('top', '0px');
+                $('.canvas-menu').css('left', canvasLeft + 'px');
+            }
         } else {
-            $('.canvas-menu').css('top', canvasPositionTop);
+            if($('.canvas-menu').css('position') !== 'absolute') {
+                $('.canvas-menu').css('position', 'absolute');
+                $('.canvas-menu').css('top', '1px');
+                $('.canvas-menu').css('left', '1px');
+            }
         }
-        if(windowLeft > canvasLeft) {
-            $('.canvas-menu').css('left', windowPositionLeft + 1);
-        } else {
-            $('.canvas-menu').css('left', canvasPositionLeft);
-        }
-    }
-
-    // Attach event listeners.
-    function attachEventListeners() {
-        $('#postForm').submit(makeDataUrl);
-        $(window).scroll(keepDrawMenuVisible);
     }
 
     // Read the canvas position into variables.
     function getCanvasPosition() {
         canvasTop = $('.canvas-menu').offset().top;
         canvasLeft = $('.canvas-menu').offset().left;
-        canvasPositionTop = canvasTop - $('.canvas-menu').parent().offset().top;
-        canvasPositionLeft = canvasLeft - $('.canvas-menu').parent().offset().left;
+    }
+
+    // Attach event listeners.
+    function attachEventListeners() {
+        $('#postForm').submit(makeDataUrl);
+        $(window).scroll(keepDrawMenuVisible);
     }
 
     // Initialize variables, attach event handlers.
