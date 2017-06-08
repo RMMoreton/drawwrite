@@ -13,12 +13,16 @@
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/bootstrap-theme.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/page/game.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'drawwrite/css/shared.css' %}">
+
+        <script type="text/javascript" src="{% static 'drawwrite/js/jquery/jquery-3.2.1.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'drawwrite/js/shared.js' %}"></script>
     </head>
 
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <div class="mainCol col-xs-12 col-sm-6 col-sm-offset-3">
                     <h3 class="text-center">{{ gameName }}</h3>
                     <h4>Chains</h4>
                     {% for player in players %}

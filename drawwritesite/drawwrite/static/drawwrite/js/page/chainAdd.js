@@ -320,6 +320,9 @@ var initCanvas = (function () {
             return;
         }
         ctx = canvas.getContext('2d');
+        ctx.fillStyle = colors.WHITE
+        ctx.rect(0, 0, canvas.width, canvas.height);
+        ctx.fill();
         ctx.lineJoin = 'round';
         ctx.lineWidth = 3;
         ctx.strokeStyle = currentColor;
