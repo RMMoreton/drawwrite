@@ -47,9 +47,71 @@
                         {% if prevLinkType == 'write' %}
                             <h4>Your drawing:</h4>
                             <div id="drawwriteCanvasWrapper">
-                                <div class="btn-group canvas-menu">
+                                <div class="btn-group canvas-menu" role="group">
                                     <div id="drawToolButton" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-pencil"></span>
+                                    </div>
+                                    <div class="colorToolButton btn-group" role="group">
+                                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="colorToolDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <div class="colorBlock colorBlockCurrent"></div>
+                                        </button>
+                                        <div class="dropdown-menu drawwriteDropdownMenu" aria-labelledby="colorToolDropdownButton">
+                                            <div class="colorMenuRow">
+                                                <div class="colorMenuOption colorBlack">
+                                                    <div class="colorBlock colorBlockBlack"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorWhite">
+                                                    <div class="colorBlock colorBlockWhite"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorBrown">
+                                                    <div class="colorBlock colorBlockBrown"></div>
+                                                </div>
+                                            </div>
+                                            <div class="colorMenuRow">
+                                                <div class="colorMenuOption colorRed">
+                                                    <div class="colorBlock colorBlockRed"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorOrange">
+                                                    <div class="colorBlock colorBlockOrange"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorYellow">
+                                                    <div class="colorBlock colorBlockYellow"></div>
+                                                </div>
+                                            </div>
+                                            <div class="colorMenuRow">
+                                                <div class="colorMenuOption colorElectricGreen">
+                                                    <div class="colorBlock colorBlockElectricGreen"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorGreen">
+                                                    <div class="colorBlock colorBlockGreen"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorTeal">
+                                                    <div class="colorBlock colorBlockTeal"></div>
+                                                </div>
+                                            </div>
+                                            <div class="colorMenuRow">
+                                                <div class="colorMenuOption colorLightBlue">
+                                                    <div class="colorBlock colorBlockLightBlue"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorRoyalBlue">
+                                                    <div class="colorBlock colorBlockRoyalBlue"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorBlue">
+                                                    <div class="colorBlock colorBlockBlue"></div>
+                                                </div>
+                                            </div>
+                                            <div class="colorMenuRow">
+                                                <div class="colorMenuOption colorPurple">
+                                                    <div class="colorBlock colorBlockPurple"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorMagenta">
+                                                    <div class="colorBlock colorBlockMagenta"></div>
+                                                </div>
+                                                <div class="colorMenuOption colorPink">
+                                                    <div class="colorBlock colorBlockPink"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="undoToolButton btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-chevron-left"></span>

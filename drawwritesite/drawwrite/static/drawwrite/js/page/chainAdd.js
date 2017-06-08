@@ -27,7 +27,7 @@ var initCanvas = (function () {
 
     // Variables!
     var canvas, ctx, pointRadius, paint, wasPath, prevX, prevY, init, tool, TOOL_ENUM, addedMenuListeners,
-        canvasStates, drawEvents, currentDrawEvent, undoParameter;
+        canvasStates, drawEvents, currentDrawEvent, undoParameter, colors, currentColor;
 
     addedMenuListeners = false;
 
@@ -35,6 +35,25 @@ var initCanvas = (function () {
     var TOOL_ENUM = {
         DRAW: "draw",
         HAND: "hand",
+    }
+
+    // Create the colors.
+    colors = {
+        BLACK: '#000000',
+        WHITE: '#FFFFFF',
+        BROWN: '#70482c',
+        RED: '#FF0000',
+        ORANGE: '#FF7F00',
+        YELLOW: '#FFFF00',
+        ELECTRICGREEN: '#7FFF00',
+        GREEN: '#00FF00',
+        TEAL: '#00FF7F',
+        LIGHTBLUE: '#00FFFF',
+        ROYALBLUE: '#007FFF',
+        BLUE: '#0000FF',
+        PURPLE: '#7F00FF',
+        MAGENTA: '#FF00FF',
+        PINK: '#FF007F',
     }
 
     // Toggle the "draw" tool.
@@ -90,6 +109,7 @@ var initCanvas = (function () {
             path: [prevX, prevY],
             type: 'path',
             radius: ctx.lineWidth,
+            color: currentColor,
         }
     }
 
@@ -183,6 +203,8 @@ var initCanvas = (function () {
 
     // Redraw a drawEvent.
     function redraw(drawEvent) {
+        ctx.strokeStyle = drawEvent.color;
+        ctx.fillStyle = drawEvent.color;
         if(drawEvent.type === 'dot') {
             ctx.beginPath();
             ctx.arc(drawEvent.path[0], drawEvent.path[1], drawEvent.radius, 0, 2*Math.PI);
@@ -201,6 +223,16 @@ var initCanvas = (function () {
             // Restore line width.
             ctx.lineWidth = currentLineWidth;
         }
+        ctx.strokeStyle = currentColor;
+        ctx.fillStyle = currentColor;
+    }
+
+    // Change the color.
+    function changeColor(newColor) {
+        currentColor = newColor;
+        ctx.strokeStyle = newColor;
+        ctx.fillStyle = newColor;
+        $('.colorBlockCurrent').css('background-color', newColor);
     }
 
     // Add all the event listeners.
@@ -226,7 +258,41 @@ var initCanvas = (function () {
         }
         $('#drawToolButton').on('click', toggleDrawTool);
         $('.undoToolButton').on('click', undo);
+        $('.colorBlack').on('click', function() { changeColor(colors.BLACK) });
+        $('.colorWhite').on('click', function() { changeColor(colors.WHITE) });
+        $('.colorBrown').on('click', function() { changeColor(colors.BROWN) });
+        $('.colorRed').on('click', function() { changeColor(colors.RED) });
+        $('.colorOrange').on('click', function() { changeColor(colors.ORANGE) });
+        $('.colorYellow').on('click', function() { changeColor(colors.YELLOW) });
+        $('.colorElectricGreen').on('click', function() { changeColor(colors.ELECTRICGREEN) });
+        $('.colorGreen').on('click', function() { changeColor(colors.GREEN) });
+        $('.colorTeal').on('click', function() { changeColor(colors.TEAL) });
+        $('.colorLightBlue').on('click', function() { changeColor(colors.LIGHTBLUE) });
+        $('.colorRoyalBlue').on('click', function() { changeColor(colors.ROYALBLUE) });
+        $('.colorBlue').on('click', function() { changeColor(colors.BLUE) });
+        $('.colorPurple').on('click', function() { changeColor(colors.PURPLE) });
+        $('.colorMagenta').on('click', function() { changeColor(colors.MAGENTA) });
+        $('.colorPink').on('click', function() { changeColor(colors.PINK) });
         addedMenuListeners = true;
+    }
+
+    // Add colors to all the color block elemnts.
+    function addColorToColorBlocks() {
+        $('.colorBlockBlack').css('background-color', colors.BLACK);
+        $('.colorBlockWhite').css('background-color', colors.WHITE);
+        $('.colorBlockBrown').css('background-color', colors.BROWN);
+        $('.colorBlockRed').css('background-color', colors.RED);
+        $('.colorBlockOrange').css('background-color', colors.ORANGE);
+        $('.colorBlockYellow').css('background-color', colors.YELLOW);
+        $('.colorBlockElectricGreen').css('background-color', colors.ELECTRICGREEN);
+        $('.colorBlockGreen').css('background-color', colors.GREEN);
+        $('.colorBlockTeal').css('background-color', colors.TEAL);
+        $('.colorBlockLightBlue').css('background-color', colors.LIGHTBLUE);
+        $('.colorBlockRoyalBlue').css('background-color', colors.ROYALBLUE);
+        $('.colorBlockBlue').css('background-color', colors.BLUE);
+        $('.colorBlockPurple').css('background-color', colors.PURPLE);
+        $('.colorBlockMagenta').css('background-color', colors.MAGENTA);
+        $('.colorBlockPink').css('background-color', colors.PINK);
     }
 
     // Create the canvas element, and make it the only child of the #drawwriteCanvasHolder div.
@@ -256,7 +322,12 @@ var initCanvas = (function () {
         ctx = canvas.getContext('2d');
         ctx.lineJoin = 'round';
         ctx.lineWidth = 3;
+        ctx.strokeStyle = currentColor;
+        ctx.fillStyle = currentColor;
         pointRadius = ctx.lineWidth / 2 + ctx.lineWidth % 2;
+
+        addColorToColorBlocks();
+        changeColor(colors.BLACK);
 
         addCanvasListeners();
         addMenuListeners();
@@ -273,7 +344,6 @@ var initCanvas = (function () {
     // Return an object with the init function mapped to init.
     return {
         init: init,
-        canvasStates: getCanvasStates,
     };
 }());
 

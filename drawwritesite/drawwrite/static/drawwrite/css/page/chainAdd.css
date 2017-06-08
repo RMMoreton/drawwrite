@@ -24,3 +24,34 @@
 .topSpace {
     margin-top: 10px;
 }
+
+#colorToolDropdownButton {
+    width: 40px;
+    height: 30px;
+}
+
+.dropdown-menu.drawwriteDropdownMenu {
+    padding: 0;
+    min-width: 0;
+}
+
+.colorMenuRow {
+    width: 105px;
+}
+
+.colorMenuOption {
+    width: 35px;
+    height: 35px;
+    padding: 8px;
+    float: left;
+}
+
+.colorMenuOption:hover {
+    background-color: #E2E2E2;
+}
+
+.colorBlock {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+}
