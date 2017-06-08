@@ -41,7 +41,7 @@ var initCanvas = (function () {
     colors = {
         BLACK: '#000000',
         WHITE: '#FFFFFF',
-        BROWN: '#70482c',
+        BROWN: '#987654',
         RED: '#FF0000',
         ORANGE: '#FF7F00',
         YELLOW: '#FFFF00',
