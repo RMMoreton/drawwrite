@@ -21,7 +21,7 @@ var drawwriteGameWaiting = (function () {
 
     // Attach event listeners.
     function attachEventListeners() {
-        window.setInterval(checkGameComplete, 5000);
+        window.setInterval(checkGameComplete, 2500);
     }
 
     // Call on document ready.

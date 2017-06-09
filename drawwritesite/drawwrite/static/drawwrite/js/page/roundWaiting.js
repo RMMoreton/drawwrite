@@ -21,7 +21,7 @@ var drawwriteRoundWaiting = (function () {
 
     // Attach event listeners.
     function attachEventListeners() {
-        window.setInterval(checkRoundComplete, 5000);
+        window.setInterval(checkRoundComplete, 2500);
     }
 
     // Called on document ready.

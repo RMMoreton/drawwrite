@@ -31,7 +31,7 @@ var drawwriteWaiting = (function () {
 
     // Attach an event listener to the 'refresh' button.
     function attachListeners() {
-        window.setInterval(checkGameStart, 5000);
+        window.setInterval(checkGameStart, 2500);
     }
 
     // Return an object holding the 'attachListeners' function.
