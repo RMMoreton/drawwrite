@@ -32,8 +32,8 @@ class Player(models.Model):
     wasCreator = models.BooleanField('Created game')
     currentRound = models.SmallIntegerField('Current Round', default=0)
 
-    class Meta:
-        unique_together = (("name", "game"))
+    #class Meta:
+    #    unique_together = (("name", "game"))
 
     def __str__(self):
         return self.name

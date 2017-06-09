@@ -53,6 +53,14 @@
                                     <div id="drawToolButton" class="btn btn-default btn-sm">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </div>
+                                    <div class="sizeToolButton btn-group" role="group">
+                                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="sizeToolDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="currentSizeHolder">3 px</span>
+                                        </button>
+                                        <div class="sizeToolHolder dropdown-menu" aria-labelledby="sizeToolDropdownButton">
+                                            <input class="sizeToolInput" type="range" min="1" max="100" step="1">
+                                        </div>
+                                    </div>
                                     <div class="colorToolButton btn-group" role="group">
                                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="colorToolDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="colorBlock colorBlockCurrent"></div>

@@ -74,6 +74,9 @@ var initCanvas = (function () {
         if(tool !== TOOL_ENUM.DRAW) {
             return;
         }
+        if(currentDrawEvent === null) {
+            return;
+        }
         if(wasPath === true) {
             wasPath = false;
         } else {
@@ -235,6 +238,18 @@ var initCanvas = (function () {
         $('.colorBlockCurrent').css('background-color', newColor);
     }
 
+    // Change the pen size.
+    function setPenWidth(newWidth) {
+        ctx.lineWidth = newWidth;
+        pointRadius = parseInt(newWidth / 2) + newWidth % 2;
+        setShowingSize(newWidth);
+    }
+
+    // Change the size of the pen we show to the user.
+    function setShowingSize(newWidth) {
+        $('.currentSizeHolder').text(newWidth + ' px');
+    }
+
     // Add all the event listeners.
     function addCanvasListeners() {
         // Mouse events.
@@ -257,7 +272,8 @@ var initCanvas = (function () {
             return;
         }
         $('#drawToolButton').on('click', toggleDrawTool);
-        $('.undoToolButton').on('click', undo);
+        $('.sizeToolInput').on('input', function() { setShowingSize( $('.sizeToolInput').val()); });
+        $('.sizeToolInput').on('change', function() { setPenWidth( $('.sizeToolInput').val()); });
         $('.colorBlack').on('click', function() { changeColor(colors.BLACK) });
         $('.colorWhite').on('click', function() { changeColor(colors.WHITE) });
         $('.colorBrown').on('click', function() { changeColor(colors.BROWN) });
@@ -273,6 +289,7 @@ var initCanvas = (function () {
         $('.colorPurple').on('click', function() { changeColor(colors.PURPLE) });
         $('.colorMagenta').on('click', function() { changeColor(colors.MAGENTA) });
         $('.colorPink').on('click', function() { changeColor(colors.PINK) });
+        $('.undoToolButton').on('click', undo);
         addedMenuListeners = true;
     }
 
@@ -324,10 +341,11 @@ var initCanvas = (function () {
         ctx.rect(0, 0, canvas.width, canvas.height);
         ctx.fill();
         ctx.lineJoin = 'round';
-        ctx.lineWidth = 3;
         ctx.strokeStyle = currentColor;
         ctx.fillStyle = currentColor;
-        pointRadius = ctx.lineWidth / 2 + ctx.lineWidth % 2;
+
+        setPenWidth(3);
+        $('.sizeToolInput').val(3);
 
         addColorToColorBlocks();
         changeColor(colors.BLACK);
@@ -347,6 +365,7 @@ var initCanvas = (function () {
     // Return an object with the init function mapped to init.
     return {
         init: init,
+        setPenWidth: setPenWidth,
     };
 }());
 

@@ -76,17 +76,26 @@ def joinGame(request):
 
     # Get the game. On error, add error objects to the session and redirect
     # to index.
-    game = None
-    try:
-        game = Game.objects.get(name=gamename)
-    except Game.DoesNotExist as e:
-        LOG.debug('tried to join non-existant game {0}'.format(gamename))
+    games = Game.objects.filter(
+            name=gamename
+        ).filter(
+            started=False
+        )
+    if len(games) > 1:
+        LOG.error('somehow, two games with name {0} are being created'.format(gamename))
+        request.session['errorTitle'] = 'Non-unique game name'
+        request.session['errorDescription'] = 'Could not find a unique game for you to join'
+        return redirect('drawwrite:index')
+    if len(games) < 1:
+        LOG.error('tried to join non-existant game {0}'.format(gamename))
         request.session['errorTitle'] = 'Non-existent game'
         request.session['errorDescription'] = ' '.join((
             'The game that you attempted to join, {0},'.format(gamename),
             'does not exist. Please check that you entered it correctly.',
         ))
         return redirect('drawwrite:index')
+    game = games[0]
+    LOG.debug('got game for player {0}'.format(username))
 
     # Add a player to the game. On error, add error objects to the session and
     # redirect to index.
@@ -180,8 +189,13 @@ def createGame(request):
     # TODO: Don't assume that all IntegrityError's mean that the user name is
     #   already taken. There are plenty of other explanations that I'm
     #   silencing by doing this.
+    except services.NameTaken as e:
+        LOG.error('player name already taken')
+        request.session['errorTitle'] = 'Player name taken'
+        request.session['errorDescription'] = e.message()
+        return redirect('drawwrite:index')
     except IntegrityError as e:
-        LOG.debug('a new game has an invalid player {0}'.format(username))
+        LOG.error('a new game has an invalid player {0}'.format(username))
         request.session['errorTitle'] = 'Player name taken'
         request.session['errorDescription'] = ' '.join((
             'The player name that you entered, {0},'.format(username),

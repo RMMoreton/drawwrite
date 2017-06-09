@@ -113,12 +113,21 @@ def newPlayer(game, name, wasCreator):
     Return a new player for the passed game and increase the game's number
     of players.
     """
-    LOG.debug('creating new player')
+    LOG.debug('creating new player with name {0}'.format(name))
     if game.started:
         LOG.error(' '.join((
             'attempted to add a player to a game that had already started',
         )))
         raise GameAlreadyStarted('attempted to add player to started game')
+    # Get other players in this game with the same name.
+    playersSameGameSameName = Player.objects.filter(
+            game=game
+        ).filter(
+            name=name
+        )
+    if len(playersSameGameSameName) > 0:
+        LOG.error('tried to add player with non-unique name to game')
+        raise NameTaken('name {0} has been taken for this game'.format(name))
     ret = Player(game=game, position=game.numPlayers, name=name,
             wasCreator=wasCreator)
     ret.save()
@@ -236,3 +245,13 @@ class WaitForPlayers(IntegrityError):
     def __init__(self, message):
         self.message = message
 #}}}
+
+# NameTaken {{{
+class NameTaken(IntegrityError):
+    """
+    Raised when a player's name is not unique to the game they're playing.
+    """
+
+    def __init__(self, message):
+        self.message = message
+# }}}
