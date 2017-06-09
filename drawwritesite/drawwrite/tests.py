@@ -33,7 +33,7 @@ class GameTests(TestCase):
         """
         name = 'test'
         game = services.newGame(name='test')
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(services.GameCurrentlyBeingMade):
             game = services.newGame(name='test')
 
     def test_game_creation_has_not_started(self):

@@ -161,13 +161,15 @@ def createGame(request):
     # TODO: Don't assume that all IntegrityError's mean that the game name is
     #   already taken. There are plenty of other explanations that I'm
     #   silencing by doing this.
+    except services.GameCurrentlyBeingMade as e:
+        LOG.info('game name {0} is being made'.format(gamename))
+        request.session['errorTitle'] = 'Game being created'
+        request.session['errorDescription'] = 'Game {0} is already being created'.format(gamename)
+        return redirect('drawwrite:index')
     except IntegrityError as e:
-        LOG.debug('game name {0} is not unique'.format(gamename))
-        request.session['errorTitle'] = 'Game name exists'
-        request.session['errorDescription'] = ' '.join((
-            'The game name that you entered, {0},'.format(gamename),
-            'is already taken. Please try a different one.',
-        ))
+        LOG.info('Exception creating game: ' + e.getMessage)
+        request.session['errorTitle'] = 'Unknown error'
+        request.session['errorDescription'] = e.getMessage()
         return redirect('drawwrite:index')
 
     # Create a player for that game. On error, add error objects to the

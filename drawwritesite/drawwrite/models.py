@@ -8,7 +8,7 @@ class Game(models.Model):
     Games have a number of players, a unique name, and a
     created time.
     """
-    name = models.CharField('Name', max_length=50, unique=True)
+    name = models.CharField('Name', max_length=50)
     numPlayers = models.SmallIntegerField('Number of Players', default=0)
     started = models.BooleanField('Started?', default=False)
     timeCreated = models.DateTimeField('Time Created', default=timezone.now)

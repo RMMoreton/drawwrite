@@ -17,11 +17,18 @@ def newGame(name):
     Return a new game with name set to the passed name.
     """
     LOG.debug('creating new game')
+    gamesWithSameName = Game.objects.filter(
+            name=name
+        ).filter(
+            started=False
+        )
+    if len(gamesWithSameName) > 0:
+        raise GameCurrentlyBeingMade('Someone else is currently making a game with that name')
     try:
         ret = Game(name=name)
         ret.save()
     except BaseException as e:
-        LOG.error('Exception: {}'.format(e))
+        LOG.error('Exception while creating game: {}'.format(e))
         raise
     LOG.debug('saved new game')
     return ret
@@ -175,6 +182,17 @@ def newWriteLink(chain, text, addedBy):
     chain.save()
     LOG.debug('increased chain link position')
     return ret
+# }}}
+
+# GameCurrentlyBeingMade {{{
+class GameCurrentlyBeingMade(IntegrityError):
+    """
+    Exception raised when trying to create a game that currently exists in
+    the 'not started' state.
+    """
+
+    def __init__(self, message):
+        self.message = message
 # }}}
 
 # GameAlreadyStarted {{{
