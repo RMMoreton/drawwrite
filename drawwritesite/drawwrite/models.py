@@ -27,16 +27,25 @@ class Player(models.Model):
     to their game, and their position in the cycle.
     """
     name = models.CharField('Name', max_length=50)
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
+    game = models.ForeignKey(Game)
     position = models.SmallIntegerField('Position')
     wasCreator = models.BooleanField('Created game')
     currentRound = models.SmallIntegerField('Current Round', default=0)
 
-    #class Meta:
-    #    unique_together = (("name", "game"))
-
     def __str__(self):
         return self.name
+
+class Chain(models.Model):
+    """
+    A Chain is used to connect WriteLinks and DrawLinks. It keeps track
+    of how many links it has, and who created it.
+    """
+    timeCreated = models.DateTimeField('Time Created', default=timezone.now)
+    nextLinkPosition = models.SmallIntegerField('Next Link Position', default=0)
+    player = models.OneToOneField(Player)
+
+    def __str__(self):
+        return '{0}\'s chain'.format(self.player)
 
 class DrawLink(models.Model):
     """
@@ -44,8 +53,8 @@ class DrawLink(models.Model):
     """
     f = models.FileField('File')
     linkPosition = models.SmallIntegerField('Link Position')
-    chain = models.ForeignKey('Chain', on_delete=models.CASCADE)
-    addedBy = models.ForeignKey('Player', on_delete=models.CASCADE)
+    chain = models.OneToOneField(Chain)
+    addedBy = models.ForeignKey(Player)
 
 class WriteLink(models.Model):
     """
@@ -53,15 +62,5 @@ class WriteLink(models.Model):
     """
     text = models.TextField('Description')
     linkPosition = models.SmallIntegerField('Link Position')
-    chain = models.ForeignKey('Chain', on_delete=models.CASCADE)
-    addedBy = models.ForeignKey('Player', on_delete=models.CASCADE)
-
-class Chain(models.Model):
-    """
-    A Chain is used to connect WriteLinks and DrawLinks. It keeps track
-    of how many links it has, and allows for the creation of new links
-    via the newDrawLink and newWriteLink functions.
-    """
-    timeCreated = models.DateTimeField('Time Created', default=timezone.now)
-    nextLinkPosition = models.SmallIntegerField('Next Link Position', default=0)
-    player = models.OneToOneField('Player', Player)
+    chain = models.OneToOneField(Chain)
+    addedBy = models.ForeignKey(Player)
