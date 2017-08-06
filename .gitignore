@@ -10,5 +10,6 @@ drawwritesite/favicon/
 drawwritesite/media/
 drawwritesite/static/
 drawwritesite/drawwritesite/settings.py
+drawwritesite/.pylintrc
 *.pyc
 *.swp

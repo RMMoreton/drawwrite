@@ -19,7 +19,7 @@
         <script type="text/javascript" src="{% static 'drawwrite/js/page/waiting.js' %}"></script>
         <script type="text/javascript" src="{% static 'drawwrite/js/shared.js' %}"></script>
 
-        <script type="text/javascript">var drawwriteAjaxUrl = "{% url 'drawwrite:checkGameStart' playerId %}";</script>
+        <script type="text/javascript">var drawwriteAjaxUrl = "{% url 'drawwrite:checkGameStart' player_id %}";</script>
     </head>
 
     <body>
@@ -30,7 +30,7 @@
 
                     <h4>Players:</h4>
                     <div id="nameList">
-                        {% for player in allPlayers %}
+                        {% for player in all_players %}
                             <div class="indented">
                                 {{ player.name }}
                             </div>
@@ -38,7 +38,7 @@
                     </div>
 
                     {% if created == True %}
-                        <form action="{% url 'drawwrite:startGame' playerId %}" method="POST">
+                        <form action="{% url 'drawwrite:startGame' player_id %}" method="POST">
                             {% csrf_token %}
                             <div class="topSpace">
                                 <button class="btn btn-default col-xs-12 col-sm-3 col-md-2">Start Game</button>

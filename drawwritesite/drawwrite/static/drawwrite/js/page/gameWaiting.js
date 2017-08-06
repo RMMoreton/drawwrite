@@ -9,9 +9,9 @@ var drawwriteGameWaiting = (function () {
                 location.reload();
             } else {
                 $('.stillPlayingWrapper').empty();
-                for(var i = 0; i < data.stillPlaying.length; i++) {
+                for(var i = 0; i < data.still_playing.length; i++) {
                     var nameHolder = document.createElement('div');
-                    nameHolder.innerText = data.stillPlaying[i];
+                    nameHolder.innerText = data.still_playing[i];
                     $(nameHolder).addClass('indent');
                     $('.stillPlayingWrapper').append(nameHolder);
                 }

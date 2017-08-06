@@ -1,93 +1,101 @@
+"""Provide database transaction services."""
+
 # Imports {{{
 import logging
-from sys import exc_info
-
-from .models import Chain, DrawLink, Game, Player, WriteLink
 
 from django.db import transaction
 from django.db import IntegrityError
+
+from .models import Chain, DrawLink, Game, Player, WriteLink
+from .bracefmt import BraceFormatter as __
 # }}}
 
 LOG = logging.getLogger(__name__)
 
-# newGame {{{
+# new_game {{{
 @transaction.atomic
-def newGame(name):
-    """
-    Return a new game with name set to the passed name.
-    """
-    LOG.debug('creating new game')
-    gamesWithSameName = Game.objects.filter(
-            name=name
-        ).filter(
-            started=False
-        )
-    if len(gamesWithSameName) > 0:
-        raise GameCurrentlyBeingMade('Someone else is currently making a game with that name')
+def new_game(name):
+    """Return a new game with name set to the passed name."""
+
+    LOG.debug(__('creating new game: {0}', name))
+    games_with_same_name = Game.objects.filter( #pylint: disable=no-member
+        name=name,
+    ).filter(
+        started=False,
+    )
+    if games_with_same_name:
+        LOG.info(__('attempted to create duplicate game: {0}', name))
+        return None
     try:
         ret = Game(name=name)
         ret.save()
-    except BaseException as e:
-        LOG.error('Exception while creating game: {}'.format(e))
+    except Exception as exception:
+        LOG.error(__('exception while creating game: {0}', exception))
         raise
-    LOG.debug('saved new game')
+    LOG.debug(__('saved new game: {0}', name))
     return ret
 # }}}
 
-# startGame {{{
+# start_game {{{
 @transaction.atomic
-def startGame(game):
-    """
-    Set the game's 'started' attribute to True.
-    """
-    LOG.debug('starting game {0}'.format(game.pk))
+def start_game(game):
+    """Set the game's 'started' attribute to True."""
+
+    # TODO catch errors, log, and raise?
+    LOG.debug(__('starting game: {0}', game.pk))
     game.started = True
     game.save()
-    LOG.debug('saved game {0}'.format(game.pk))
+    LOG.debug(__('saved game: {0}', game.pk))
     return
 # }}}
 
-# playerFinished {{{
+# player_finished {{{
 @transaction.atomic
-def playerFinished(player):
-    LOG.debug('increasing the number of finished players for game {0}'.format(player.game.pk))
+def player_finished(player):
+    """Record that the given player has finished the current round."""
+
+    LOG.debug(__(
+        'increasing the number of finished players for game {0}',
+        player.game.pk,
+    ))
 
     # Make sure the game has started.
     if not player.game.started:
-        raise GameNotStarted('The game must have started for a player to complete a round')
+        raise GameNotStarted(
+            'The game must have started for a player to complete a round',
+        )
 
     # Make sure the number of players who have finished isn't greater then the
     # number of players in the game.
-    if player.game.numFinishedCurrentRound >= player.game.numPlayers:
+    if player.game.num_finished_current_round >= player.game.num_players:
         raise IntegrityError('Too many players have completed the current round')
 
     # Make sure that the user isn't trying to finish a round that they've
     # already finished.
-    if not player.currentRound == player.game.roundNum:
+    if not player.current_round == player.game.round_num:
         raise IntegrityError('A players round is not in sync with the game round')
 
     # Add one to the player's round.
-    player.currentRound += 1
+    player.current_round += 1
     player.save()
 
     # Add one to the number of players who have finished the current round.
-    player.game.numFinishedCurrentRound += 1
+    player.game.num_finished_current_round += 1
     player.game.save()
 
     # Check if the round is complete.
-    if player.game.numFinishedCurrentRound == player.game.numPlayers:
-        nextRound(player.game)
+    if player.game.num_finished_current_round == player.game.num_players:
+        next_round(player.game)
 
-    LOG.debug('increased numFinishedCurrentRound for game {0}'.format(player.game.pk))
+    LOG.debug(__('increased num_finished_current_round for game {0}', player.game.pk))
 # }}}
 
-# nextRound {{{
+# next_round {{{
 @transaction.atomic
-def nextRound(game):
-    """
-    Take a game to it's next round.
-    """
-    LOG.debug('increasing round for game {0}'.format(game.pk))
+def next_round(game):
+    """Take a game to it's next round."""
+
+    LOG.debug(__('increasing round for game {0}', game.pk))
 
     # Make sure the game has started.
     if not game.started:
@@ -95,55 +103,62 @@ def nextRound(game):
 
     # Make sure the number of players who have completed the current round
     # equals the number of players in the game.
-    if not game.numPlayers == game.numFinishedCurrentRound:
+    if not game.numPlayers == game.num_finished_current_round:
         raise WaitForPlayers('Not all players have completed the current round')
 
-    # Increase the round, set numPlayersFinishedCurrentRound to 0.
-    game.roundNum += 1
-    game.numFinishedCurrentRound = 0
+    # Increase the round, set num_players_finished_current_round to 0.
+    game.round_num += 1
+    game.num_finished_current_round = 0
     game.save()
 
-    LOG.debug('round increased for game {0}'.format(game.pk))
+    LOG.debug(__('round increased for game {0}', game.pk))
 # }}}
 
-# newPlayer {{{
+# new_player {{{
 @transaction.atomic
-def newPlayer(game, name, wasCreator):
+def new_player(game, name, was_creator):
     """
     Return a new player for the passed game and increase the game's number
     of players.
     """
-    LOG.debug('creating new player with name {0}'.format(name))
+
+    LOG.debug(__('creating new player with name {0}', name))
     if game.started:
-        LOG.error(' '.join((
-            'attempted to add a player to a game that had already started',
-        )))
-        raise GameAlreadyStarted('attempted to add player to started game')
-    # Get other players in this game with the same name.
-    playersSameGameSameName = Player.objects.filter(
-            game=game
-        ).filter(
-            name=name
+        LOG.error(__(
+            'could not add player to game {0} because that game has already started',
+            name,
+        ))
+        raise GameAlreadyStarted(
+            'It is not possible to add a player to a game that has already started',
         )
-    if len(playersSameGameSameName) > 0:
-        LOG.error('tried to add player with non-unique name to game')
-        raise NameTaken('name {0} has been taken for this game'.format(name))
-    ret = Player(game=game, position=game.numPlayers, name=name,
-            wasCreator=wasCreator)
+    # Get other players in this game with the same name.
+    players_same_game_same_name = Player.objects.filter( #pylint: disable=no-member
+        game=game,
+    ).filter(
+        name=name,
+    )
+    if players_same_game_same_name:
+        LOG.error(__('player {0} already exists in game {1}', name, game.name))
+        return None
+    ret = Player(
+        game=game,
+        position=game.num_players,
+        name=name,
+        was_creator=was_creator,
+    )
     ret.save()
     LOG.debug('saved player')
-    game.numPlayers += 1
+    game.num_players += 1
     game.save()
-    LOG.debug('increased game numPlayers by 1')
+    LOG.debug('increased game num_players by 1')
     return ret
 # }}}
 
-# newChain {{{
+# new_chain {{{
 @transaction.atomic
-def newChain(player):
-    """
-    Create a new chain for the given user.
-    """
+def new_chain(player):
+    """Create a new chain for the given user."""
+
     LOG.debug('creating new player')
     ret = Chain(player=player)
     ret.save()
@@ -151,61 +166,59 @@ def newChain(player):
     return ret
 # }}}
 
-# newDrawLink {{{
+# new_draw_link {{{
 @transaction.atomic
-def newDrawLink(chain, fileObj, addedBy):
+def new_draw_link(chain, file_obj, added_by):
     """
     Return a new draw link for the passed chain, or None if the next link
     for the passed chain shouldn't be a draw link.
     """
+
     LOG.debug('creating new draw link')
-    if 0 == chain.nextLinkPosition % 2:
+    if chain.next_link_position % 2 == 0:
         LOG.error('attempted to create draw link at an invalid position')
         return None
-    ret = DrawLink(f=fileObj, linkPosition=chain.nextLinkPosition,
-            chain=chain, addedBy = addedBy)
+    ret = DrawLink(
+        drawing=file_obj,
+        link_position=chain.next_link_position,
+        chain=chain,
+        added_by=added_by,
+    )
     ret.save()
     LOG.debug('saved new draw link')
-    chain.nextLinkPosition += 1
+    chain.next_link_position += 1
     chain.save()
     LOG.debug('increased chain link position')
     return ret
 # }}}
 
-# newWriteLink {{{
+# new_write_link {{{
 @transaction.atomic
-def newWriteLink(chain, text, addedBy):
+def new_write_link(chain, text, added_by):
     """
     Return a new write link for the passed chain, or None if the next link
     for the passed chain shouldn't be a write link.
     """
     LOG.debug('creating new write link')
-    if 1 == chain.nextLinkPosition % 2:
+    if chain.next_link_position % 2 == 1:
         LOG.error('attempted to create write link in invalid position')
         return None
-    ret = WriteLink(text=text, linkPosition=chain.nextLinkPosition,
-            chain=chain, addedBy=addedBy)
+    ret = WriteLink(
+        text=text,
+        link_position=chain.next_link_position,
+        chain=chain,
+        added_by=added_by,
+    )
     ret.save()
     LOG.debug('saved new write link')
-    chain.nextLinkPosition += 1
+    chain.next_link_position += 1
     chain.save()
     LOG.debug('increased chain link position')
     return ret
 # }}}
 
-# GameCurrentlyBeingMade {{{
-class GameCurrentlyBeingMade(IntegrityError):
-    """
-    Exception raised when trying to create a game that currently exists in
-    the 'not started' state.
-    """
-
-    def __init__(self, message):
-        self.message = message
-# }}}
-
 # GameAlreadyStarted {{{
-class GameAlreadyStarted(IntegrityError):
+class GameAlreadyStarted(IntegrityError): #pylint: disable=too-few-public-methods
     """
     Exception raised when trying to add a player to a game that has already
     started.
@@ -219,7 +232,7 @@ class GameAlreadyStarted(IntegrityError):
 # }}}
 
 # GameNotStarted {{{
-class GameNotStarted(IntegrityError):
+class GameNotStarted(IntegrityError): #pylint: disable=too-few-public-methods
     """
     Exception raised when trying to do something to a game that has not
     started, but should have.
@@ -233,7 +246,7 @@ class GameNotStarted(IntegrityError):
 # }}}
 
 # WaitForPlayers {{{
-class WaitForPlayers(IntegrityError):
+class WaitForPlayers(IntegrityError): #pylint: disable=too-few-public-methods
     """
     Exception raised when not all players have finished a task that they need
     to finish in order for the game to progress.
@@ -247,7 +260,7 @@ class WaitForPlayers(IntegrityError):
 #}}}
 
 # NameTaken {{{
-class NameTaken(IntegrityError):
+class NameTaken(IntegrityError): #pylint: disable=too-few-public-methods
     """
     Raised when a player's name is not unique to the game they're playing.
     """

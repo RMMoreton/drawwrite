@@ -26,27 +26,27 @@
 
             <div class="row">
                 <div class="mainCol col-xs-12 col-sm-6 col-sm-offset-3">
-                    {% if prevLinkType != '' %}
+                    {% if prev_link_type != '' %}
                         <h3 class="text-center">Add</h3>
-                        {% if prevLinkType == 'write' %}
+                        {% if prev_link_type == 'write' %}
                             <h4>Previous player's writing:</h4>
                             <div class="indented">
-                                <p>{{ prevLink.text }}</p>
+                                <p>{{ prev_link.text }}</p>
                             </div>
                         {% else %}
                             <h4>Previous player's drawing:</h4>
                             <div class="indented">
-                                <img class="boxed scaleImage" src="{{ prevLink.f.url }}">
+                                <img class="boxed scaleImage" src="{{ prev_link.drawing.url }}">
                             </div>
                         {% endif %}
                     {% else %}
                         <h3 class="text-center">Start</h3>
                     {% endif %}
 
-                    <form id="postForm" action="{% url 'drawwrite:createLink' playerId %}" method="post">
+                    <form id="postForm" action="{% url 'drawwrite:createLink' player_id %}" method="post">
                         {% csrf_token %}
 
-                        {% if prevLinkType == 'write' %}
+                        {% if prev_link_type == 'write' %}
                             <h4>Your drawing:</h4>
                             <div id="drawwriteCanvasWrapper">
                                 <div class="btn-group canvas-menu" role="group">
@@ -132,7 +132,7 @@
                             <input id="imgDataHolder" type="hidden" name="drawing">
                         {% endif %}
 
-                        {% if prevLinkType == 'draw' or prevLinkType == '' %}
+                        {% if prev_link_type == 'draw' or prev_link_type == '' %}
                             <h4>Your writing:</h4>
                             <div class="form-group indented">
                                 <textarea class="form-control" name="description" id="id_description"></textarea>

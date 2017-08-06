@@ -26,14 +26,14 @@
                     <h3 class="text-center">{{ player.name }}</h3>
                     {% for link in links %}
                         <div>
-                            {% if link.f %}
-                                <h4>{{ link.addedBy.name }} drew:</h4>
+                            {% if link.drawing %}
+                                <h4>{{ link.added_by.name }} drew:</h4>
                             {% elif link.text %}
-                                <h4>{{ link.addedBy.name }} wrote:</h4>
+                                <h4>{{ link.added_by.name }} wrote:</h4>
                             {% endif %}
-                            {% if link.f %}
+                            {% if link.drawing %}
                                 <div class="indented">
-                                    <img class="boxed scaleImage" src="{{ link.f.url }}">
+                                    <img class="boxed scaleImage" src="{{ link.drawing.url }}">
                                 </div>
                             {% elif link.text %}
                                 <div class="indented">

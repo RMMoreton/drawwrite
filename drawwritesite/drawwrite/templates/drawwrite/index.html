@@ -25,13 +25,13 @@
                 <div class="mainCol col-xs-12 col-sm-6 col-sm-offset-3">
                     <h1 class="text-center">DrawWrite!</h1>
 
-                    {% if errorTitle %}
+                    {% if error_title %}
                         <div class="panel panel-danger">
                             <div class="panel-heading">
-                                <h2 class="panel-title">{{errorTitle}}</h2>
+                                <h2 class="panel-title">{{error_title}}</h2>
                             </div>
                             <div class="panel-body">
-                                <p>{{errorDescription}}</p>
+                                <p>{{error_description}}</p>
                             </div>
                         </div>
                     {% endif %}

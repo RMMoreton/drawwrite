@@ -1,3 +1,5 @@
+"""The forms used by DrawWrite."""
+
 import logging
 
 from django import forms
@@ -11,6 +13,6 @@ class IndexForm(forms.Form):
     like to join/create/use.
     """
     username = forms.CharField(label='Your Name', max_length=50,
-            validators=[validate_slug])
+                               validators=[validate_slug])
     gamename = forms.CharField(label='Game Name', max_length=50,
-            validators=[validate_slug])
+                               validators=[validate_slug])
