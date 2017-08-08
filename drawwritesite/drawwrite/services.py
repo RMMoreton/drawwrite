@@ -103,7 +103,7 @@ def next_round(game):
 
     # Make sure the number of players who have completed the current round
     # equals the number of players in the game.
-    if not game.numPlayers == game.num_finished_current_round:
+    if not game.num_players == game.num_finished_current_round:
         raise WaitForPlayers('Not all players have completed the current round')
 
     # Increase the round, set num_players_finished_current_round to 0.
@@ -228,6 +228,7 @@ class GameAlreadyStarted(IntegrityError): #pylint: disable=too-few-public-method
     """
 
     def __init__(self, message):
+        super(GameAlreadyStarted, self).__init__(message)
         self.message = message
 # }}}
 
@@ -242,6 +243,7 @@ class GameNotStarted(IntegrityError): #pylint: disable=too-few-public-methods
     """
 
     def __init__(self, message):
+        super(GameNotStarted, self).__init__(message)
         self.message = message
 # }}}
 
@@ -256,6 +258,7 @@ class WaitForPlayers(IntegrityError): #pylint: disable=too-few-public-methods
     """
 
     def __init__(self, message):
+        super(WaitForPlayers, self).__init__(message)
         self.message = message
 #}}}
 
@@ -266,5 +269,6 @@ class NameTaken(IntegrityError): #pylint: disable=too-few-public-methods
     """
 
     def __init__(self, message):
+        super(NameTaken, self).__init__(message)
         self.message = message
 # }}}

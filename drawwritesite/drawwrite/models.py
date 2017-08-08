@@ -53,7 +53,7 @@ class DrawLink(models.Model):
     """
     drawing = models.FileField('File')
     link_position = models.SmallIntegerField('Link Position')
-    chain = models.OneToOneField(Chain)
+    chain = models.ForeignKey(Chain)
     added_by = models.ForeignKey(Player)
 
 class WriteLink(models.Model):
@@ -62,5 +62,5 @@ class WriteLink(models.Model):
     """
     text = models.TextField('Description')
     link_position = models.SmallIntegerField('Link Position')
-    chain = models.OneToOneField(Chain)
+    chain = models.ForeignKey(Chain)
     added_by = models.ForeignKey(Player)

@@ -23,6 +23,7 @@ class ChainAdmin(admin.ModelAdmin):
     """Configure the top level Chain view."""
     inlines = [WriteLinkInline, DrawLinkInline]
     list_display = (
+        'pk',
         get_game_name_from_chain,
         'player',
         'next_link_position',

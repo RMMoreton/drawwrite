@@ -8,7 +8,6 @@ from unittest import mock
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.storage import Storage
-from django.db.utils import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 
@@ -38,7 +37,7 @@ class GameTests(TestCase):
         name = 'test'
         services.new_game(name=name)
         second_game = services.new_game(name=name)
-        self.assertIsInstance(second_game, None)
+        self.assertIs(second_game, None)
 
     def test_game_creation_has_not_started(self):
         """
@@ -138,8 +137,7 @@ class GameTests(TestCase):
         game = services.new_game(name='test')
         name = 'test player'
         services.new_player(game, name, True)
-        with self.assertRaises(IntegrityError):
-            services.new_player(game, name, True)
+        self.assertIs(services.new_player(game, name, True), None)
 # }}}
 
 # ChainTests {{{

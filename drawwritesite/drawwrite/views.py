@@ -29,6 +29,8 @@ def index(request):
     # Create the form that we'll put on this page.
     form = IndexForm()
 
+    LOG.debug("enter index")
+
     # TODO errors shouldn't get added by title and description, but by number.
     #      Then I should look up the title and description from that number.
     return render(request, 'drawwrite/index.html', {
@@ -269,7 +271,7 @@ def play(request, player_id):
         if player.current_round == player.game.num_players:
             LOG.debug('show game finished waiting page')
             return render(request, 'drawwrite/gameWaiting.html', {
-                'gameId' : game.pk,
+                'game_id' : game.pk,
             })
 
         # If the game isn't finished, show the waiting page for the next round.
@@ -327,7 +329,7 @@ def play(request, player_id):
 
     # If the chain has no links, show the player a screen to enter their first
     # text link.
-    if chain.nextLinkPosition == 0:
+    if chain.next_link_position == 0:
         LOG.debug(__('returning page for first link for user {0}', player_id))
         return render(request, 'drawwrite/chainAdd.html', {
             'prev_link_type': '',
@@ -495,7 +497,7 @@ def create_link(request, player_id):
     LOG.debug(__('got the chain for player with pk {0}', player_id))
 
     # Figure out what type of link to make.
-    if chain.nextLinkPosition % 2 == 0:
+    if chain.next_link_position % 2 == 0:
         # The POST data needs to have the 'description' field or something
         # is wrong.
         if 'description' not in request.POST.keys():
