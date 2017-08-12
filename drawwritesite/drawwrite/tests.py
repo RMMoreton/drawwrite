@@ -46,7 +46,7 @@ class GameTests(TestCase):
         game = services.new_game(name='test')
         self.assertIs(game.started, False)
 
-    def test_default_timeCreated_is_valid_time(self):
+    def test_default_time_created_is_valid_time(self):
         """
         Creating a game with no specified 'created time' should yield a
         game with a valid 'created time' anyway.
@@ -54,7 +54,7 @@ class GameTests(TestCase):
         game = services.new_game(name='test')
         self.assertIsInstance(game.time_created, datetime.datetime)
 
-    def test_default_numPlayers_is_zero(self):
+    def test_default_num_players_is_zero(self):
         """
         Creating a game should set the default numPlayers to zero.
         """
@@ -79,7 +79,7 @@ class GameTests(TestCase):
         player = services.new_player(game, 'test player', True)
         self.assertIsInstance(player, Player)
 
-    def test_create_new_player_increases_numPlayers(self):
+    def test_create_new_player_increases_num_players(self):
         """
         Creating a new player should increase numPlayers by one.
         """
@@ -165,7 +165,7 @@ class ChainTests(TestCase):
         chain = services.new_chain(player)
         self.assertIsInstance(chain, Chain)
 
-    def test_default_timeCreated_is_valid_time(self):
+    def test_default_time_created_is_valid_time(self):
         """
         Creating a Chain with no arguments should yield a valid
         datetime.datetime in timeCreated.
@@ -175,7 +175,7 @@ class ChainTests(TestCase):
         chain = services.new_chain(player)
         self.assertIsInstance(chain.time_created, datetime.datetime)
 
-    def test_default_timeCreated_is_recent(self):
+    def test_default_time_created_is_recent(self):
         """
         Creating a Chain with no arguments should yield a chain with
         timeCreated being in the very recent past.
@@ -188,7 +188,7 @@ class ChainTests(TestCase):
         self.assertIs(pre_creation < chain.time_created, True)
         self.assertIs(post_creation > chain.time_created, True)
 
-    def test_default_nextLinkPosition_is_zero(self):
+    def test_default_next_link_position_is_zero(self):
         """
         Creating a Chain with no arguments should yield a chain with
         nextLinkPosition of zero.
@@ -198,7 +198,7 @@ class ChainTests(TestCase):
         chain = services.new_chain(player)
         self.assertEqual(chain.next_link_position, 0)
 
-    def test_newDrawLink_with_even_nextLinkPosition_returns_None(self):
+    def test_new_draw_link_with_even_next_link_position_returns_none(self):
         """
         Calling newDrawLink() should return None when the chain's
         nextLinkPosition is an even number.
@@ -212,7 +212,7 @@ class ChainTests(TestCase):
             chain.next_link_position = 26
             self.assertIs(services.new_draw_link(chain, self.get_mocked_file(), player), None)
 
-    def test_newDrawLink_with_odd_nextLinkPosition_returns_DrawLink(self):
+    def test_new_draw_link_with_odd_next_link_position_returns_draw_link(self):
         """
         Calling newDrawLink() should return a new DrawLink object when
         nextLinkPosition is an even number.
@@ -229,7 +229,7 @@ class ChainTests(TestCase):
             self.assertIsInstance(services.new_draw_link(chain, self.get_mocked_file(), player),
                                   DrawLink)
 
-    def test_newDrawLink_with_even_nextLinkPosition_does_not_increase_nextLinkPosition(self):
+    def test_new_draw_link_with_even_next_link_position_does_not_increase_next_link_position(self):
         """
         Calling newDrawLink() should not increase nextLinkPosition if
         nextLinkPosition is even.
@@ -245,7 +245,7 @@ class ChainTests(TestCase):
             services.new_draw_link(chain, self.get_mocked_file(), player)
             self.assertEqual(chain.next_link_position, 26)
 
-    def test_newDrawLink_with_odd_nextLinkPosition_inceases_nextLinkPosition(self):
+    def test_new_draw_link_with_odd_next_link_position_inceases_next_link_position(self):
         """
         Calling newDrawLink() should increase nextLinkPosition if
         nextLinkPosition is odd.
@@ -262,7 +262,7 @@ class ChainTests(TestCase):
             services.new_draw_link(chain, self.get_mocked_file(), player)
             self.assertEqual(chain.next_link_position, 28)
 
-    def test_newDrawLink_creates_DrawLink_with_correct_linkPosition(self):
+    def test_new_draw_link_creates_draw_link_with_correct_link_position(self):
         """
         Calling newDrawLink() when nextLinkPosition is odd should create
         a DrawLink with the previous value of nextLinkPosition.
@@ -281,7 +281,7 @@ class ChainTests(TestCase):
             draw_link = services.new_draw_link(chain, self.get_mocked_file(), player)
             self.assertEqual(expect, draw_link.link_position)
 
-    def test_newWriteLink_with_even_nextLinkPosition_returns_WriteLink(self):
+    def test_new_write_link_with_even_next_link_position_returns_write_link(self):
         """
         Calling newWriteLink() should return a WriteLink if nextLinkPosition
         is an even number.
@@ -293,7 +293,7 @@ class ChainTests(TestCase):
         chain.next_link_position = 26
         self.assertIsInstance(services.new_write_link(chain, 'fake text', player), WriteLink)
 
-    def test_newWriteLink_with_odd_nextLinkPosition_returns_None(self):
+    def test_new_write_link_with_odd_next_link_position_returns_none(self):
         """
         Calling newWriteLink() should return None if nextLinkPosition is an
         odd number.
@@ -306,7 +306,7 @@ class ChainTests(TestCase):
         chain.next_link_position = 27
         self.assertIs(services.new_write_link(chain, 'fake text', player), None)
 
-    def test_newWriteLink_with_even_nextLinkPosition_increases_nextLinkPosition(self):
+    def test_new_write_link_with_even_next_link_position_increases_next_link_position(self):
         """
         Calling newWriteLink() should increase nextLinkPosition if nextLinkPosition
         is even.
@@ -320,7 +320,7 @@ class ChainTests(TestCase):
         services.new_write_link(chain, 'fake text', player)
         self.assertEqual(chain.next_link_position, 27)
 
-    def test_newWriteLink_with_odd_nextLinkPosition_does_not_increase_nextLinkPosition(self):
+    def test_new_write_link_with_odd_next_link_position_does_not_increase_next_link_position(self):
         """
         Calling newWriteLink() should not increase nextLinkPosition if nextLinkPosition
         is odd.
@@ -335,7 +335,7 @@ class ChainTests(TestCase):
         services.new_write_link(chain, 'fake text', player)
         self.assertEqual(chain.next_link_position, 27)
 
-    def test_newWriteLink_creates_WriteLink_with_correct_linkPosition(self):
+    def test_new_write_link_creates_write_link_with_correct_link_position(self):
         """
         Calling newWriteLink() when nextLinePosition is even should create a
         WriteLink with the previous value of nextLinePosition.
