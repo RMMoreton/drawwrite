@@ -9,27 +9,35 @@ from drawwrite.models import Game
 
 LOG = logging.getLogger(__name__)
 
-class IndexForm(forms.Form):
+class CreateGameForm(forms.Form):
     """
-    Allows the user to input a game name and a username that they would
-    like to join/create/use.
+    Allows the user to create a game with whatever name they want.
     """
     username = forms.CharField(label='Your Name', max_length=50,
                                validators=[validate_slug])
     gamename = forms.CharField(label='Game Name', max_length=50,
                                validators=[validate_slug])
 
+
+class JoinGameForm(forms.Form):
+    """
+    Allows the user to join a game by inputing their name and selecing a
+    game name from a dropdown.
+    """
+    username = forms.CharField(label='Your Name', max_length=50,
+                               validators=[validate_slug])
+    
     def __init__(self, *args, **kwargs):
         """
         Grab the list of avaliable games to join and set the picklist to include
         all of them.
         """
-        super(IndexForm, self).__init__(*args, **kwargs)
-        self.fields['open_games'] = forms.ChoiceField(
+        super(JoinGameForm, self).__init__(*args, **kwargs)
+        self.fields['gamename'] = forms.ChoiceField(
             label='Available Games',
             choices=get_available_games,
             validators=[validate_slug],
-            required=False,
+            required=True,
         )
 
 def get_available_games():

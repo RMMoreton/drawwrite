@@ -12,7 +12,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect, render
 
-from drawwrite.forms import IndexForm
+from drawwrite.forms import CreateGameForm, JoinGameForm
 from drawwrite.models import Chain, Game, DrawLink, Player, WriteLink
 
 from . import services
@@ -28,16 +28,15 @@ def index(request):
     """
     LOG.debug("enter index")
 
-    # Create the form that we'll put on this page.
-    form = IndexForm()
-
-    # Grab the list of avaliable games to join.
-    available_games = Game.objects.filter(started=False) #pylint: disable=no-member
+    # Create the two forms that we'll put on this page.
+    create_form = CreateGameForm()
+    join_form = JoinGameForm()
 
     # TODO errors shouldn't get added by title and description, but by number.
     #      Then I should look up the title and description from that number.
     return render(request, 'drawwrite/index.html', {
-        'form': form,
+        'create_form': create_form,
+        'join_form': join_form,
         'error_title': request.session.pop('error_title', None),
         'error_description': request.session.pop('error_description', None),
     })
@@ -60,7 +59,7 @@ def join_game(request):
         return redirect('drawwrite:index')
 
     # Get the form from the POSTed data.
-    form = IndexForm(request.POST)
+    form = JoinGameForm(request.POST)
 
     # Invalid forms redirect to the index with an error.
     if not form.is_valid():
@@ -152,7 +151,7 @@ def create_game(request):
         return redirect('drawwrite:index')
 
     # Get the form from the POSTed data.
-    form = IndexForm(request.POST)
+    form = CreateGameForm(request.POST)
 
     # Invalid forms redirect to the index with an error.
     if not form.is_valid():
