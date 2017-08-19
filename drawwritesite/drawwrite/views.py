@@ -734,3 +734,14 @@ def show_chain(request, player_id):
         'player': player,
     })
 # }}}
+
+# get_available_games {{{
+def get_available_games(request):
+    """Return a list of game names that may be joined."""
+    being_created = Game.objects.filter(started=False) #pylint: disable=no-member
+    options = []
+    for game in being_created:
+        options.append(game.name)
+    LOG.debug('returning list of available games')
+    return JsonResponse({'options': options})
+# }}}

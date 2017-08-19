@@ -24,4 +24,6 @@ urlpatterns = [ #pylint: disable=invalid-name
         name='showGame'),
     url(r'^showChain/(?P<player_id>[0-9]+)$', views.show_chain,
         name='showChain'),
+    url(r'^getAvailableGames$', views.get_available_games,
+        name='getAvailableGames')
 ]

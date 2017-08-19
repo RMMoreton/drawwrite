@@ -43,7 +43,10 @@ class JoinGameForm(forms.Form):
 def get_available_games():
     """Get a list of games that are available to join."""
     games = Game.objects.filter(started=False) #pylint: disable=no-member
-    options = [('', '')]
+    if len(games) == 0:
+        options = [('', '- None -')]
+    else:
+        options = [('', '- Select -')]
     for game in games:
         options.append((game.name, game.name))
     return options
