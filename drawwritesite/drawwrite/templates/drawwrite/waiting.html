@@ -41,7 +41,7 @@
                         <form action="{% url 'drawwrite:startGame' player_id %}" method="POST">
                             {% csrf_token %}
                             <div class="topSpace">
-                                <button class="btn btn-default col-xs-12 col-sm-3 col-md-2">Start Game</button>
+                                <button class="btn btn-default col-xs-12 col-sm-4 col-md-3">Start Game</button>
                             </div>
                         </form>
                     {% else %}

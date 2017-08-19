@@ -17,6 +17,7 @@
 
         <script type="text/javascript" src="{% static 'drawwrite/js/jquery/jquery-3.2.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'drawwrite/js/shared.js' %}"></script>
+        <script type="text/javascript" src="{% static 'drawwrite/js/page/index.js' %}"></script>
     </head>
 
     <body>
@@ -38,14 +39,20 @@
 
                     <form method="post">
                         {% csrf_token %}
+
                         <div class="form-group">
                             <label for="{{ form.username.id_for_label }}">Your name:</label>
                             {{ form.username|add_class:"form-control" }}
                         </div>
-                        <div class="form-group">
+                        <div class="form-group game-name">
                             <label for="{{ form.gamename.id_for_label }}">Game name:</label>
                             {{ form.gamename|add_class:"form-control" }}
                         </div>
+                        <div class="form-group">
+                            <label for="{{ form.open_games.id_for_label }}">Available games:</label>
+                            {{ form.open_games|add_class:"form-control" }}
+                        </div>
+
                         <button type="submit" class="btn btn-default col-xs-12 col-sm-6" formaction="{% url 'drawwrite:joinGame'%}">Join</button>
                         <button type="submit" class="btn btn-default col-xs-12 col-sm-6" formaction="{% url 'drawwrite:createGame' %}">Create</button>
                     </form>

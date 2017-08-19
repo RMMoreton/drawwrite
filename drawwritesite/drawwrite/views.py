@@ -26,10 +26,13 @@ def index(request):
     """
     The front page of the app.
     """
+    LOG.debug("enter index")
+
     # Create the form that we'll put on this page.
     form = IndexForm()
 
-    LOG.debug("enter index")
+    # Grab the list of avaliable games to join.
+    available_games = Game.objects.filter(started=False) #pylint: disable=no-member
 
     # TODO errors shouldn't get added by title and description, but by number.
     #      Then I should look up the title and description from that number.
@@ -153,10 +156,14 @@ def create_game(request):
 
     # Invalid forms redirect to the index with an error.
     if not form.is_valid():
+        #LOG.debug(__(
+        #    'username {0} or gamename {1} invalid',
+        #    form.data['username'],
+        #    form.data['gamename'],
+        #))
         LOG.debug(__(
-            'username {0} or gamename {1} invalid',
-            form.data['username'],
-            form.data['gamename'],
+            'form error: {0}',
+            form.errors,
         ))
         request.session['error_title'] = 'Invalid input'
         request.session['error_description'] = ' '.join((

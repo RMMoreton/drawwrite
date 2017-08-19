@@ -139,7 +139,7 @@ def new_player(game, name, was_creator):
     )
     if players_same_game_same_name:
         LOG.error(__('player {0} already exists in game {1}', name, game.name))
-        return None
+        raise NameTaken(__('player {0} already exists in game {1}', name, game.name))
     ret = Player(
         game=game,
         position=game.num_players,
